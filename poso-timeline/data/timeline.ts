@@ -24,56 +24,64 @@ export const CATEGORY_COLORS: Record<
   Category,
   { bg: string; border: string; dot: string; label: string }
 > = {
+  // Era / regime dividers — warm cream strip
   subtitle: {
-    bg: "#F5F0E8",
-    border: "#C9B99A",
-    dot: "#C9B99A",
+    bg: "#FAEEE1",
+    border: "#FBAE84",
+    dot: "#FBAE84",
     label: "Era / Regime",
   },
+  // Kalla oligarch — mango orange #FE973B
   "kalla-oligarch": {
-    bg: "#FFF3E0",
-    border: "#FFAD4F",
-    dot: "#FFAD4F",
+    bg: "#FFF3E5",
+    border: "#FE973B",
+    dot: "#FE973B",
     label: "Kalla Oligarch & Business",
   },
+  // National politics — banana yellow #FFD965
   "national-politics": {
-    bg: "#FFFDE7",
-    border: "#EFD46B",
-    dot: "#EFD46B",
+    bg: "#FFFBE8",
+    border: "#FFD965",
+    dot: "#F8BA43",
     label: "National Politics of Hydropower",
   },
+  // Socio-environmental — cantaloupe/salmon #FBA18C
   "socio-environmental": {
-    bg: "#FFF0ED",
-    border: "#FDA075",
-    dot: "#F0816D",
+    bg: "#FFF2EE",
+    border: "#FBA18C",
+    dot: "#FBA18C",
     label: "Socio-Environmental Violence",
   },
+  // Community resistance — olive green #D3D477
   "community-resistance": {
-    bg: "#F0F4E8",
-    border: "#B6B644",
-    dot: "#B6B644",
+    bg: "#F5F6E0",
+    border: "#D3D477",
+    dot: "#D3D477",
     label: "Community Resistance",
   },
+  // Conflict & militarisation — red #E94B3F
   "conflict-militarisation": {
     bg: "#FDECEA",
-    border: "#F0816D",
+    border: "#E94B3F",
     dot: "#E94B3F",
     label: "Conflict, Militarisation & Securitisation",
   },
+  // Human rights — sky blue #9EC9EF
   "human-rights": {
-    bg: "#E8F4F8",
+    bg: "#EBF5FC",
     border: "#9EC9EF",
     dot: "#9EC9EF",
     label: "Human Rights Interventions",
   },
+  // Public donations — lavender #E8D9EC
   "public-donations": {
-    bg: "#F3EEF8",
+    bg: "#F5F0F8",
     border: "#E8D9EC",
     dot: "#A98067",
     label: "Public Donations / Church Relations",
   },
   uncategorised: {
-    bg: "#F5F5F5",
+    bg: "#F5F5F0",
     border: "#CCCCCC",
     dot: "#AAAAAA",
     label: "Other",

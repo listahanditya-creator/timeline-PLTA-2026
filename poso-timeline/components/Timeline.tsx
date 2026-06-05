@@ -5,11 +5,10 @@ import { timelineData, CATEGORY_COLORS } from "@/data/timeline";
 import TimelineCard from "./TimelineCard";
 import Legend from "./Legend";
 
-// Spacing constants
-const EVENT_WIDTH = 300;       // px between each event
-const SUBTITLE_WIDTH = 220;    // px for regime-divider columns
-const CARD_AREA_HEIGHT = 280;  // px above & below the centre line
-const LINE_Y = CARD_AREA_HEIGHT; // y position of the horizontal line
+const EVENT_WIDTH = 300;
+const SUBTITLE_WIDTH = 230;
+const CARD_AREA_HEIGHT = 280;
+const LINE_Y = CARD_AREA_HEIGHT;
 
 export default function Timeline() {
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -18,7 +17,6 @@ export default function Timeline() {
   const scrollLeft = useRef(0);
   const [dragging, setDragging] = useState(false);
 
-  /* ---------- drag handlers ---------- */
   const onMouseDown = useCallback((e: React.MouseEvent) => {
     isDragging.current = true;
     setDragging(true);
@@ -39,15 +37,12 @@ export default function Timeline() {
     setDragging(false);
   }, []);
 
-  // Also cancel drag if mouse leaves the window
   useEffect(() => {
     const stop = () => { isDragging.current = false; setDragging(false); };
     window.addEventListener("mouseup", stop);
     return () => window.removeEventListener("mouseup", stop);
   }, []);
 
-  /* ---------- build layout ---------- */
-  // Assign x positions to each event/subtitle
   type LayoutItem = {
     event: (typeof timelineData)[number];
     x: number;
@@ -56,7 +51,7 @@ export default function Timeline() {
   };
 
   const items: LayoutItem[] = [];
-  let cursor = 80; // starting x offset
+  let cursor = 80;
   let sideToggle = 0;
 
   for (const event of timelineData) {
@@ -72,35 +67,34 @@ export default function Timeline() {
   }
 
   const totalWidth = cursor + 200;
-  const canvasHeight = CARD_AREA_HEIGHT * 2 + 1; // above + line + below
+  const canvasHeight = CARD_AREA_HEIGHT * 2 + 1;
 
   return (
     <div
       className="flex flex-col h-screen overflow-hidden"
-      style={{ backgroundColor: "#0d0d0d", color: "#fff" }}
+      style={{ backgroundColor: "#FFFBE9", color: "#1a1208" }}
     >
-      {/* ── Top navigation bar ── */}
+      {/* ── Top nav bar ── */}
       <header
         className="flex-shrink-0 flex items-center justify-between px-8 py-4 border-b"
-        style={{ borderColor: "rgba(255,255,255,0.08)" }}
+        style={{ borderColor: "rgba(26,18,8,0.08)", backgroundColor: "#FFFBE9" }}
       >
         <div className="flex items-center gap-8">
-          {/* Logo / project mark */}
           <div
             className="text-[11px] tracking-[0.25em] uppercase font-semibold"
-            style={{ fontFamily: "var(--font-hanken)", color: "rgba(255,255,255,0.9)" }}
+            style={{ fontFamily: "var(--font-hanken)", color: "#1a1208" }}
           >
-            PLTA Poso
+            PLTA Poso · 2026
           </div>
           <nav className="flex gap-6">
             {["About", "Methodology", "Reading Room"].map((item) => (
               <a
                 key={item}
                 href="#"
-                className="text-[10px] tracking-[0.15em] uppercase transition-opacity hover:opacity-100"
+                className="text-[10px] tracking-[0.15em] uppercase hover:opacity-100 transition-opacity"
                 style={{
                   fontFamily: "var(--font-hanken)",
-                  color: "rgba(255,255,255,0.4)",
+                  color: "rgba(26,18,8,0.4)",
                   textDecoration: "none",
                 }}
               >
@@ -109,34 +103,29 @@ export default function Timeline() {
             ))}
           </nav>
         </div>
-
-        {/* Language toggle */}
         <div
           className="text-[10px] tracking-[0.15em] uppercase"
-          style={{ color: "rgba(255,255,255,0.3)", fontFamily: "var(--font-hanken)" }}
+          style={{ color: "rgba(26,18,8,0.3)", fontFamily: "var(--font-hanken)" }}
         >
           EN / IDN
         </div>
       </header>
 
-      {/* ── Page title + body ── */}
+      {/* ── Title + description ── */}
       <div
-        className="flex-shrink-0 px-8 pt-8 pb-6 border-b"
-        style={{ borderColor: "rgba(255,255,255,0.06)" }}
+        className="flex-shrink-0 px-8 pt-7 pb-5 border-b"
+        style={{ borderColor: "rgba(26,18,8,0.07)" }}
       >
         <h1
-          className="text-[22px] font-bold leading-tight max-w-2xl mb-3"
-          style={{ fontFamily: "var(--font-hanken)", fontWeight: 700 }}
+          className="text-[20px] font-bold leading-tight max-w-2xl mb-3"
+          style={{ fontFamily: "var(--font-hanken)", fontWeight: 800, color: "#1a1208" }}
         >
           Unfolding Socio-Environmental Violence of the Hydroelectric
           Infrastructure Violence in Poso Lake Watershed
         </h1>
         <p
           className="text-[11px] leading-relaxed max-w-3xl mb-4"
-          style={{
-            fontFamily: "var(--font-inter)",
-            color: "rgba(255,255,255,0.45)",
-          }}
+          style={{ fontFamily: "var(--font-inter)", color: "rgba(26,18,8,0.5)" }}
         >
           This timeline analysis aims to understand the Poso Energy Hydroelectric Dam in
           the larger Indonesia&apos;s socio-political contexts, unfolding the violence (and
@@ -147,19 +136,24 @@ export default function Timeline() {
         <Legend />
       </div>
 
-      {/* ── Drag instruction hint ── */}
+      {/* ── Drag hint ── */}
       <div
         className="flex-shrink-0 flex items-center gap-2 px-8 py-2 border-b"
-        style={{ borderColor: "rgba(255,255,255,0.04)" }}
+        style={{ borderColor: "rgba(26,18,8,0.05)" }}
       >
         <svg width="14" height="10" viewBox="0 0 14 10" fill="none">
-          <path d="M1 5h12M9 1l4 4-4 4" stroke="rgba(255,255,255,0.25)" strokeWidth="1" strokeLinecap="round"/>
+          <path
+            d="M1 5h12M9 1l4 4-4 4"
+            stroke="rgba(26,18,8,0.22)"
+            strokeWidth="1"
+            strokeLinecap="round"
+          />
         </svg>
         <span
           className="text-[9px] tracking-[0.2em] uppercase"
-          style={{ color: "rgba(255,255,255,0.2)", fontFamily: "var(--font-hanken)" }}
+          style={{ color: "rgba(26,18,8,0.22)", fontFamily: "var(--font-hanken)" }}
         >
-          Click and drag to navigate
+          Click and drag to navigate · hover cards to read
         </span>
       </div>
 
@@ -171,38 +165,33 @@ export default function Timeline() {
           cursor: dragging ? "grabbing" : "grab",
           userSelect: "none",
           scrollbarWidth: "none",
+          backgroundColor: "#FFFBE9",
         }}
         onMouseDown={onMouseDown}
         onMouseMove={onMouseMove}
         onMouseUp={onMouseUp}
         onMouseLeave={onMouseUp}
       >
-        {/* Hide webkit scrollbar */}
         <style>{`::-webkit-scrollbar { display: none; }`}</style>
 
-        {/* Canvas */}
         <div
           className="relative"
-          style={{
-            width: `${totalWidth}px`,
-            height: `${canvasHeight}px`,
-            minWidth: "100%",
-          }}
+          style={{ width: `${totalWidth}px`, height: `${canvasHeight}px`, minWidth: "100%" }}
         >
           {/* Horizontal centre line */}
           <div
-            className="absolute left-0 right-0"
+            className="absolute left-0"
             style={{
               top: `${LINE_Y}px`,
               height: "1px",
-              backgroundColor: "rgba(255,255,255,0.15)",
               width: `${totalWidth}px`,
+              backgroundColor: "rgba(26,18,8,0.15)",
             }}
           />
 
-          {/* Render each item */}
           {items.map((item) => {
             if (item.isSubtitle) {
+              const colors = CATEGORY_COLORS["subtitle"];
               return (
                 <div
                   key={item.event.id}
@@ -212,21 +201,18 @@ export default function Timeline() {
                     top: 0,
                     width: `${SUBTITLE_WIDTH}px`,
                     height: `${canvasHeight}px`,
-                    borderLeft: "1px solid rgba(255,255,255,0.12)",
-                    borderRight: "1px solid rgba(255,255,255,0.06)",
-                    backgroundColor: "rgba(255,255,255,0.018)",
+                    borderLeft: `1.5px solid ${colors.border}`,
+                    borderRight: `1px solid rgba(26,18,8,0.05)`,
+                    backgroundColor: colors.bg,
                   }}
                 >
-                  {/* Year range */}
-                  <div
-                    className="absolute px-4 pt-5"
-                    style={{ top: 0 }}
-                  >
+                  {/* Era label top */}
+                  <div className="absolute px-4 pt-5">
                     <p
-                      className="text-[10px] tracking-[0.2em] uppercase mb-2"
+                      className="text-[9px] tracking-[0.2em] uppercase mb-1"
                       style={{
                         fontFamily: "var(--font-hanken)",
-                        color: "rgba(255,255,255,0.3)",
+                        color: "rgba(26,18,8,0.35)",
                       }}
                     >
                       {item.event.year}
@@ -235,39 +221,40 @@ export default function Timeline() {
                       className="text-[11px] font-semibold leading-snug"
                       style={{
                         fontFamily: "var(--font-hanken)",
-                        color: "rgba(255,255,255,0.7)",
-                        maxWidth: "160px",
+                        color: "#1a1208",
+                        maxWidth: "170px",
+                        fontWeight: 600,
                       }}
                     >
                       {item.event.keyEvent}
                     </p>
                   </div>
 
-                  {/* Divider line at centre */}
+                  {/* Stronger line at centre */}
                   <div
                     className="absolute left-4 right-4"
                     style={{
                       top: `${LINE_Y}px`,
-                      height: "1px",
-                      backgroundColor: "rgba(255,255,255,0.3)",
+                      height: "1.5px",
+                      backgroundColor: colors.border,
                     }}
                   />
 
-                  {/* Description below */}
+                  {/* Short description below */}
                   {item.event.description && (
                     <div
                       className="absolute px-4"
-                      style={{ top: `${LINE_Y + 16}px`, maxWidth: "190px" }}
+                      style={{ top: `${LINE_Y + 14}px`, maxWidth: "195px" }}
                     >
                       <p
-                        className="text-[10px] leading-relaxed"
+                        className="text-[9px] leading-relaxed"
                         style={{
                           fontFamily: "var(--font-inter)",
-                          color: "rgba(255,255,255,0.3)",
+                          color: "rgba(26,18,8,0.38)",
                         }}
                       >
-                        {item.event.description.slice(0, 180)}
-                        {item.event.description.length > 180 ? "..." : ""}
+                        {item.event.description.slice(0, 200)}
+                        {item.event.description.length > 200 ? "…" : ""}
                       </p>
                     </div>
                   )}
@@ -275,47 +262,35 @@ export default function Timeline() {
               );
             }
 
-            // Regular event — dot + card
-            const dotY = LINE_Y;
+            // Regular event
             const colors = CATEGORY_COLORS[item.event.category];
-
             return (
               <div
                 key={item.event.id}
                 className="absolute"
-                style={{
-                  left: `${item.x}px`,
-                  top: 0,
-                  height: `${canvasHeight}px`,
-                }}
+                style={{ left: `${item.x}px`, top: 0, height: `${canvasHeight}px` }}
               >
-                {/* Dot on the line */}
+                {/* Dot on line */}
                 <div
                   className="absolute rounded-full"
                   style={{
-                    width: "8px",
-                    height: "8px",
+                    width: "10px",
+                    height: "10px",
                     backgroundColor: colors.dot,
-                    top: `${dotY - 4}px`,
-                    left: "8px",
+                    top: `${LINE_Y - 5}px`,
+                    left: "6px",
                     zIndex: 10,
-                    boxShadow: `0 0 6px ${colors.dot}55`,
+                    border: "2px solid #FFFBE9",
+                    boxShadow: `0 0 0 1.5px ${colors.dot}`,
                   }}
                 />
 
                 {/* Card */}
                 <div
                   className="absolute"
-                  style={{
-                    top: `${dotY}px`,
-                    left: 0,
-                    zIndex: 20,
-                  }}
+                  style={{ top: `${LINE_Y}px`, left: 0, zIndex: 20 }}
                 >
-                  <TimelineCard
-                    event={item.event}
-                    position={item.position}
-                  />
+                  <TimelineCard event={item.event} position={item.position} />
                 </div>
               </div>
             );
@@ -327,13 +302,13 @@ export default function Timeline() {
       <div
         className="flex-shrink-0 border-t overflow-hidden"
         style={{
-          borderColor: "rgba(255,255,255,0.06)",
-          height: "32px",
-          backgroundColor: "#0a0a0a",
+          borderColor: "rgba(26,18,8,0.07)",
+          height: "28px",
+          backgroundColor: "#FFF7DC",
         }}
       >
         <div
-          className="flex items-center h-full pl-20 gap-0"
+          className="flex items-center h-full pl-20"
           style={{ width: `${totalWidth}px` }}
         >
           {Array.from(
@@ -348,7 +323,7 @@ export default function Timeline() {
               className="text-[9px] tracking-[0.1em]"
               style={{
                 fontFamily: "var(--font-hanken)",
-                color: "rgba(255,255,255,0.2)",
+                color: "rgba(26,18,8,0.28)",
                 minWidth: `${EVENT_WIDTH}px`,
                 fontVariantNumeric: "tabular-nums",
               }}

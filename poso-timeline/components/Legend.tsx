@@ -27,7 +27,7 @@ export default function Legend() {
               className="text-[9px] tracking-[0.12em] uppercase"
               style={{
                 fontFamily: "var(--font-hanken)",
-                color: "rgba(255,255,255,0.45)",
+                color: "rgba(26,18,8,0.5)",
               }}
             >
               {c.label}
