@@ -17,7 +17,7 @@ export default function TimelineCard({ event, position }: Props) {
       className={`absolute ${
         position === "above" ? "bottom-[calc(100%+20px)]" : "top-[calc(100%+20px)]"
       } left-0`}
-      style={{ width: "250px" }}
+      style={{ width: "270px" }}
     >
       {/* Connector line from dot to card */}
       <div
@@ -33,7 +33,7 @@ export default function TimelineCard({ event, position }: Props) {
           border: `1.5px solid ${expanded ? colors.dot : colors.border}`,
           backgroundColor: expanded ? colors.bg : "#FFFBE9",
           boxShadow: expanded
-            ? `0 4px 24px 0 ${colors.dot}22`
+            ? `0 6px 28px 0 ${colors.dot}28`
             : "0 1px 4px 0 rgba(0,0,0,0.06)",
           transition: "all 0.22s ease",
         }}
@@ -47,56 +47,81 @@ export default function TimelineCard({ event, position }: Props) {
         />
 
         <div className="pl-4 pr-3 py-3">
-          {/* Year · date */}
+
+          {/* ── YEAR — OCR A Extended, largest in card ── */}
           <p
-            className="text-[10px] tracking-[0.14em] uppercase mb-1"
             style={{
-              fontFamily: "var(--font-hanken)",
+              fontFamily: "var(--font-ocr)",
+              fontSize: "15px",
+              letterSpacing: "0.06em",
               color: colors.dot,
-              fontWeight: 600,
+              marginBottom: "3px",
+              lineHeight: 1.2,
               fontVariantNumeric: "tabular-nums",
             }}
           >
-            {event.date ? `${event.year} · ${event.date}` : event.year}
+            {event.date ? `${event.year}` : event.year}
           </p>
 
-          {/* Category label */}
+          {/* Date (if present) — smaller OCR */}
+          {event.date && (
+            <p
+              style={{
+                fontFamily: "var(--font-ocr)",
+                fontSize: "10px",
+                letterSpacing: "0.08em",
+                color: colors.dot,
+                opacity: 0.75,
+                marginBottom: "6px",
+              }}
+            >
+              {event.date}
+            </p>
+          )}
+
+          {/* Category label — tiny uppercase Hanken */}
           <p
-            className="text-[9px] tracking-[0.1em] uppercase mb-2"
             style={{
               fontFamily: "var(--font-hanken)",
-              color: "rgba(26,18,8,0.35)",
+              fontSize: "9px",
+              letterSpacing: "0.12em",
+              textTransform: "uppercase",
+              color: "rgba(26,18,8,0.33)",
+              marginBottom: "8px",
             }}
           >
             {CATEGORY_COLORS[event.category].label}
           </p>
 
-          {/* Key event title */}
+          {/* ── KEY EVENT — Hanken Grotesk, medium, second in hierarchy ── */}
           <h3
-            className="text-[12px] leading-snug"
             style={{
               fontFamily: "var(--font-hanken)",
+              fontSize: "14px",
               fontWeight: 600,
+              lineHeight: 1.35,
               color: "#1a1208",
-              marginBottom: expanded ? "8px" : "4px",
+              marginBottom: expanded ? "10px" : "6px",
             }}
           >
             {event.keyEvent}
           </h3>
 
-          {/* Description — expands on hover */}
+          {/* ── DESCRIPTION — Inter, smallest, expands on hover ── */}
           <div
             className="overflow-hidden"
             style={{
-              maxHeight: expanded ? "500px" : "0px",
-              transition: "max-height 0.3s ease",
+              maxHeight: expanded ? "600px" : "0px",
+              transition: "max-height 0.32s ease",
             }}
           >
             <p
-              className="text-[11px] leading-relaxed whitespace-pre-line"
               style={{
                 fontFamily: "var(--font-inter)",
-                color: "rgba(26,18,8,0.65)",
+                fontSize: "12px",
+                lineHeight: 1.7,
+                color: "rgba(26,18,8,0.62)",
+                whiteSpace: "pre-line",
               }}
             >
               {event.description}
@@ -107,8 +132,12 @@ export default function TimelineCard({ event, position }: Props) {
                 href={event.archive}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-block mt-3 text-[9px] tracking-widest uppercase"
                 style={{
+                  display: "inline-block",
+                  marginTop: "12px",
+                  fontFamily: "var(--font-ocr)",
+                  fontSize: "9px",
+                  letterSpacing: "0.1em",
                   color: colors.dot,
                   textDecoration: "none",
                   borderBottom: `1px solid ${colors.dot}`,
@@ -116,17 +145,20 @@ export default function TimelineCard({ event, position }: Props) {
                 }}
                 onClick={(e) => e.stopPropagation()}
               >
-                Source →
+                SOURCE →
               </a>
             )}
           </div>
 
           {!expanded && (
             <p
-              className="text-[9px] tracking-widest uppercase"
               style={{
-                color: "rgba(26,18,8,0.2)",
-                fontFamily: "var(--font-hanken)",
+                fontFamily: "var(--font-ocr)",
+                fontSize: "8px",
+                letterSpacing: "0.15em",
+                textTransform: "uppercase",
+                color: "rgba(26,18,8,0.18)",
+                marginTop: "2px",
               }}
             >
               hover to read

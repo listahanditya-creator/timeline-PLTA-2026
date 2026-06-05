@@ -3,6 +3,7 @@
 :root {
   --background: #FFFBE9;
   --foreground: #1a1208;
+  --font-ocr: 'OCR A Extended', 'OCR A Std', 'Courier New', monospace;
 }
 
 @theme inline {
@@ -10,6 +11,16 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-inter);
   --font-display: var(--font-hanken);
+}
+
+/* Web fallback: load OCR A Extended from CDN for deployed environments */
+@font-face {
+  font-family: 'OCR A Extended';
+  src: local('OCR A Extended'),
+       local('OCRAExtended'),
+       local('OCR A Std');
+  font-weight: normal;
+  font-style: normal;
 }
 
 body {

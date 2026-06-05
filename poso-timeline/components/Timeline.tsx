@@ -82,7 +82,7 @@ export default function Timeline() {
         <div className="flex items-center gap-8">
           <div
             className="text-[11px] tracking-[0.25em] uppercase font-semibold"
-            style={{ fontFamily: "var(--font-hanken)", color: "#1a1208" }}
+            style={{ fontFamily: "var(--font-ocr)", color: "#1a1208", fontSize: "13px", letterSpacing: "0.1em" }}
           >
             PLTA Poso · 2026
           </div>
@@ -117,15 +117,22 @@ export default function Timeline() {
         style={{ borderColor: "rgba(26,18,8,0.07)" }}
       >
         <h1
-          className="text-[20px] font-bold leading-tight max-w-2xl mb-3"
-          style={{ fontFamily: "var(--font-hanken)", fontWeight: 800, color: "#1a1208" }}
+          className="leading-tight max-w-3xl mb-4"
+          style={{
+            fontFamily: "var(--font-ocr)",
+            fontWeight: 400,
+            color: "#1a1208",
+            fontSize: "28px",
+            letterSpacing: "0.02em",
+            lineHeight: 1.25,
+          }}
         >
           Unfolding Socio-Environmental Violence of the Hydroelectric
           Infrastructure Violence in Poso Lake Watershed
         </h1>
         <p
-          className="text-[11px] leading-relaxed max-w-3xl mb-4"
-          style={{ fontFamily: "var(--font-inter)", color: "rgba(26,18,8,0.5)" }}
+          className="leading-relaxed max-w-3xl mb-4"
+          style={{ fontFamily: "var(--font-inter)", color: "rgba(26,18,8,0.5)", fontSize: "12px" }}
         >
           This timeline analysis aims to understand the Poso Energy Hydroelectric Dam in
           the larger Indonesia&apos;s socio-political contexts, unfolding the violence (and
@@ -209,21 +216,24 @@ export default function Timeline() {
                   {/* Era label top */}
                   <div className="absolute px-4 pt-5">
                     <p
-                      className="text-[9px] tracking-[0.2em] uppercase mb-1"
                       style={{
-                        fontFamily: "var(--font-hanken)",
-                        color: "rgba(26,18,8,0.35)",
+                        fontFamily: "var(--font-ocr)",
+                        fontSize: "13px",
+                        letterSpacing: "0.06em",
+                        color: "rgba(26,18,8,0.5)",
+                        marginBottom: "6px",
                       }}
                     >
                       {item.event.year}
                     </p>
                     <p
-                      className="text-[11px] font-semibold leading-snug"
                       style={{
                         fontFamily: "var(--font-hanken)",
-                        color: "#1a1208",
-                        maxWidth: "170px",
+                        fontSize: "13px",
                         fontWeight: 600,
+                        lineHeight: 1.35,
+                        color: "#1a1208",
+                        maxWidth: "175px",
                       }}
                     >
                       {item.event.keyEvent}
