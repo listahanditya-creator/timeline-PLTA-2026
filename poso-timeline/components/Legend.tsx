@@ -14,24 +14,21 @@ const LEGEND_CATEGORIES: Category[] = [
 
 export default function Legend() {
   return (
-    <div className="flex flex-col gap-2">
-      <p
-        className="text-[10px] uppercase tracking-widest text-stone-400 mb-1"
-        style={{ fontFamily: "var(--font-hanken)" }}
-      >
-        Category
-      </p>
+    <div className="flex items-center gap-6 flex-wrap">
       {LEGEND_CATEGORIES.map((cat) => {
         const c = CATEGORY_COLORS[cat];
         return (
           <div key={cat} className="flex items-center gap-2">
             <span
-              className="w-3 h-3 rounded-sm flex-shrink-0"
+              className="w-2 h-2 rounded-full flex-shrink-0"
               style={{ backgroundColor: c.dot }}
             />
             <span
-              className="text-xs text-stone-600"
-              style={{ fontFamily: "var(--font-hanken)" }}
+              className="text-[9px] tracking-[0.12em] uppercase"
+              style={{
+                fontFamily: "var(--font-hanken)",
+                color: "rgba(255,255,255,0.45)",
+              }}
             >
               {c.label}
             </span>
