@@ -6,7 +6,7 @@ import TimelineCard from "./TimelineCard";
 import Legend from "./Legend";
 
 const EVENT_WIDTH = 300;
-const SUBTITLE_WIDTH = 270;
+const SUBTITLE_WIDTH = 320;
 const CARD_AREA_HEIGHT = 320;  // more room above & below the line
 const LINE_Y = CARD_AREA_HEIGHT;
 
@@ -256,9 +256,9 @@ export default function Timeline() {
                       <p
                         style={{
                           fontFamily: "var(--font-inter)",
-                          fontSize: "11px",
-                          lineHeight: 1.65,
-                          color: "rgba(255,255,255,0.75)",
+                          fontSize: "14px",
+                          lineHeight: 1.7,
+                          color: "rgba(255,255,255,0.85)",
                         }}
                       >
                         {item.event.description.slice(0, 260)}
