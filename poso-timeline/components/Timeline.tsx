@@ -215,7 +215,7 @@ export default function Timeline() {
                     <p
                       style={{
                         fontFamily: "var(--font-ocr)",
-                        fontSize: "32px",
+                        fontSize: "28px",
                         letterSpacing: "0.04em",
                         color: "rgba(255,255,255,0.9)",
                         marginBottom: "12px",

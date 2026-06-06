@@ -52,7 +52,7 @@ export default function TimelineCard({ event, position }: Props) {
           <p
             style={{
               fontFamily: "var(--font-ocr)",
-              fontSize: "28px",
+              fontSize: "24px",
               letterSpacing: "0.04em",
               color: "#E94B3F",
               marginBottom: "2px",
