@@ -215,10 +215,10 @@ export default function Timeline() {
                     <p
                       style={{
                         fontFamily: "var(--font-ocr)",
-                        fontSize: "15px",
+                        fontSize: "18px",
                         letterSpacing: "0.05em",
-                        color: "rgba(255,255,255,0.8)",
-                        marginBottom: "8px",
+                        color: "rgba(255,255,255,0.85)",
+                        marginBottom: "10px",
                       }}
                     >
                       {item.event.year}
@@ -226,11 +226,11 @@ export default function Timeline() {
                     <p
                       style={{
                         fontFamily: "var(--font-hanken)",
-                        fontSize: "16px",
+                        fontSize: "18px",
                         fontWeight: 700,
                         lineHeight: 1.3,
                         color: "#fff",
-                        maxWidth: "185px",
+                        maxWidth: "260px",
                       }}
                     >
                       {item.event.keyEvent}
