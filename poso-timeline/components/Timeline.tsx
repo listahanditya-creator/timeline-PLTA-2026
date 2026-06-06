@@ -6,7 +6,7 @@ import TimelineCard from "./TimelineCard";
 
 const EVENT_WIDTH    = 360;
 const SUBTITLE_WIDTH = 320;
-const CARD_AREA_HEIGHT = 440;   // tall enough for expanded above-cards
+const CARD_AREA_HEIGHT = 520;   // tall enough for pinned/expanded cards above & below
 const LINE_Y = CARD_AREA_HEIGHT;
 
 const NAV_ITEMS = ["About", "Methodology", "Reading Room"];
@@ -298,7 +298,7 @@ export default function Timeline() {
           className="flex-1"
           style={{
             overflowX: "scroll",
-            overflowY: "clip",            // ← breaks the overflow-x/y conflict
+            overflowY: "auto",            // auto allows vertical scroll to read full cards
             cursor: dragging ? "grabbing" : "grab",
             userSelect: "none",
             scrollbarWidth: "none",
