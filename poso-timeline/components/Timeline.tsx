@@ -336,13 +336,15 @@ export default function Timeline() {
                     key={item.event.id}
                     className="absolute"
                     style={{
-                      left: `${item.x}px`, top: 0,
-                      width: `${SUBTITLE_WIDTH}px`, height: `${canvasHeight}px`,
+                      left: `${item.x}px`,
+                      top: `${LINE_Y - 160}px`,          // start just above the year
+                      width: `${SUBTITLE_WIDTH}px`,
+                      height: "380px",                    // year + title above + description below
                       border: "1.5px solid #FBAE84",
                       backgroundColor: "#FDEBD8",
                     }}
                   >
-                    <div className="absolute px-5" style={{ top: `${LINE_Y - 150}px`, maxWidth: `${SUBTITLE_WIDTH}px` }}>
+                    <div className="absolute px-5" style={{ top: "10px", maxWidth: `${SUBTITLE_WIDTH}px` }}>
                       <p style={{ fontFamily: "var(--font-ocr)", fontSize: "28px", letterSpacing: "0.04em", color: "#E94B3F", marginBottom: "10px", lineHeight: 1.1 }}>
                         {item.event.year}
                       </p>
@@ -350,11 +352,12 @@ export default function Timeline() {
                         {item.event.keyEvent}
                       </p>
                     </div>
-                    <div className="absolute left-5 right-5" style={{ top: `${LINE_Y}px`, height: "1.5px", backgroundColor: "rgba(26,18,8,0.15)" }} />
+                    {/* Centre rule — at 160px from card top (= LINE_Y in canvas coords) */}
+                    <div className="absolute left-5 right-5" style={{ top: "160px", height: "1.5px", backgroundColor: "rgba(26,18,8,0.15)" }} />
                     {item.event.description && (
                       <RegimeDescription
                         text={item.event.description}
-                        top={LINE_Y + 16}
+                        top={176}                         // 160 + 16
                         width={SUBTITLE_WIDTH}
                       />
                     )}
