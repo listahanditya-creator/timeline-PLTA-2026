@@ -6,7 +6,7 @@ import TimelineCard from "./TimelineCard";
 
 const EVENT_WIDTH    = 360;
 const SUBTITLE_WIDTH = 320;
-const CARD_AREA_HEIGHT = 300;   // compact — cards sit closer to header
+const CARD_AREA_HEIGHT = 460;   // extra headroom above the line for above-cards
 const LINE_Y = CARD_AREA_HEIGHT;
 
 const NAV_ITEMS = ["About", "Methodology", "Reading Room"];
@@ -69,7 +69,7 @@ function RegimeDescription({ text, top, width }: { text: string; top: number; wi
             fontFamily: "var(--font-inter)",
             fontSize: "11px",
             lineHeight: 1.65,
-            color: "rgba(26,18,8,0.65)",
+            color: "rgba(26,8,0,0.75)",
           }}
         >
           {open || !short ? text : text.slice(0, PREVIEW_CHARS) + "…"}
@@ -340,20 +340,21 @@ export default function Timeline() {
                       top: `${LINE_Y - 160}px`,          // start just above the year
                       width: `${SUBTITLE_WIDTH}px`,
                       height: "380px",                    // year + title above + description below
-                      border: "1.5px solid #FBAE84",
-                      backgroundColor: "#FDEBD8",
+                      border: "2px solid #C83020",
+                      backgroundColor: "rgba(233,75,63,0.8)",
+                      overflow: "hidden",
                     }}
                   >
-                    <div className="absolute px-5" style={{ top: "10px", maxWidth: `${SUBTITLE_WIDTH}px` }}>
-                      <p style={{ fontFamily: "var(--font-ocr)", fontSize: "28px", letterSpacing: "0.04em", color: "#E94B3F", marginBottom: "10px", lineHeight: 1.1 }}>
+                    <div className="absolute px-5" style={{ top: "10px", width: `${SUBTITLE_WIDTH - 40}px`, overflow: "hidden" }}>
+                      <p style={{ fontFamily: "var(--font-ocr)", fontSize: "28px", letterSpacing: "0.04em", color: "#5C1500", marginBottom: "10px", lineHeight: 1.1 }}>
                         {item.event.year}
                       </p>
-                      <p style={{ fontFamily: "var(--font-hanken)", fontSize: "18px", fontWeight: 700, lineHeight: 1.3, color: "#1a1208", maxWidth: "280px" }}>
+                      <p style={{ fontFamily: "var(--font-hanken)", fontSize: "16px", fontWeight: 700, lineHeight: 1.35, color: "#1a0800", maxWidth: "280px", wordBreak: "break-word" }}>
                         {item.event.keyEvent}
                       </p>
                     </div>
                     {/* Centre rule — at 160px from card top (= LINE_Y in canvas coords) */}
-                    <div className="absolute left-5 right-5" style={{ top: "160px", height: "1.5px", backgroundColor: "rgba(26,18,8,0.15)" }} />
+                    <div className="absolute left-5 right-5" style={{ top: "160px", height: "1.5px", backgroundColor: "rgba(26,8,0,0.25)" }} />
                     {item.event.description && (
                       <RegimeDescription
                         text={item.event.description}

@@ -49,7 +49,7 @@ export default function TimelineCard({ event, position }: Props) {
         className="relative select-none"
         style={{
           border: `1.5px solid ${expanded ? colors.dot : colors.border}`,
-          backgroundColor: colors.bg,
+          backgroundColor: "transparent",
           boxShadow: pinned
             ? `0 8px 32px 0 ${colors.dot}44`
             : expanded
@@ -64,9 +64,9 @@ export default function TimelineCard({ event, position }: Props) {
         onClick={handleClick}
       >
         {/* Left colour bar */}
-        <div className="absolute top-0 left-0 bottom-0 w-[3px]" style={{ backgroundColor: colors.dot }} />
+        <div className="absolute top-0 left-0 bottom-0 w-[6px]" style={{ backgroundColor: colors.dot }} />
 
-        <div style={{ padding: "12px 12px 8px 16px" }}>
+        <div style={{ padding: "12px 12px 8px 18px" }}>
           {/* Year */}
           <p style={{ fontFamily: "var(--font-ocr)", fontSize: "24px", letterSpacing: "0.04em", color: "#E94B3F", lineHeight: 1.1, marginBottom: event.date ? "2px" : "6px", fontVariantNumeric: "tabular-nums" }}>
             {event.year}
@@ -94,7 +94,7 @@ export default function TimelineCard({ event, position }: Props) {
         {expanded && (
           <div style={{ borderTop: `1px solid ${colors.dot}44` }}>
             <div
-              style={{ maxHeight: "260px", overflowY: "auto", padding: "10px 12px 4px 16px", scrollbarWidth: "thin", scrollbarColor: `${colors.dot} transparent` }}
+              style={{ maxHeight: "260px", overflowY: "auto", padding: "10px 12px 4px 18px", scrollbarWidth: "thin", scrollbarColor: `${colors.dot} transparent` }}
               onClick={(e) => e.stopPropagation()} /* allow text selection without toggling pin */
             >
               <p style={{ fontFamily: "var(--font-inter)", fontSize: "12px", lineHeight: 1.7, color: "rgba(26,18,8,0.82)", whiteSpace: "pre-line" }}>
@@ -114,14 +114,14 @@ export default function TimelineCard({ event, position }: Props) {
               )}
             </div>
 
-            <p style={{ padding: "4px 12px 8px 16px", fontFamily: "var(--font-ocr)", fontSize: "8px", letterSpacing: "0.15em", textTransform: "uppercase", color: "rgba(26,18,8,0.25)" }}>
+            <p style={{ padding: "4px 12px 8px 18px", fontFamily: "var(--font-ocr)", fontSize: "8px", letterSpacing: "0.15em", textTransform: "uppercase", color: "rgba(26,18,8,0.25)" }}>
               {pinned ? "click to close" : "click to pin open"}
             </p>
           </div>
         )}
 
         {!expanded && (
-          <p style={{ padding: "0 12px 10px 16px", fontFamily: "var(--font-ocr)", fontSize: "8px", letterSpacing: "0.15em", textTransform: "uppercase", color: "rgba(26,18,8,0.22)" }}>
+          <p style={{ padding: "0 12px 10px 18px", fontFamily: "var(--font-ocr)", fontSize: "8px", letterSpacing: "0.15em", textTransform: "uppercase", color: "rgba(26,18,8,0.22)" }}>
             hover / click to read
           </p>
         )}
