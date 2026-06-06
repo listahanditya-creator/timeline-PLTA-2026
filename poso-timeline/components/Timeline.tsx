@@ -7,7 +7,7 @@ import Legend from "./Legend";
 
 const EVENT_WIDTH = 300;
 const SUBTITLE_WIDTH = 230;
-const CARD_AREA_HEIGHT = 280;
+const CARD_AREA_HEIGHT = 320;  // more room above & below the line
 const LINE_Y = CARD_AREA_HEIGHT;
 
 export default function Timeline() {
@@ -20,27 +20,27 @@ export default function Timeline() {
   const onMouseDown = useCallback((e: React.MouseEvent) => {
     isDragging.current = true;
     setDragging(true);
-    startX.current = e.pageX - (scrollRef.current?.offsetLeft ?? 0);
+    startX.current = e.pageX;
     scrollLeft.current = scrollRef.current?.scrollLeft ?? 0;
   }, []);
 
-  const onMouseMove = useCallback((e: React.MouseEvent) => {
-    if (!isDragging.current || !scrollRef.current) return;
-    e.preventDefault();
-    const x = e.pageX - scrollRef.current.offsetLeft;
-    const walk = (x - startX.current) * 1.2;
-    scrollRef.current.scrollLeft = scrollLeft.current - walk;
-  }, []);
-
-  const onMouseUp = useCallback(() => {
-    isDragging.current = false;
-    setDragging(false);
-  }, []);
-
+  // Attach move + up to window so dragging never "sticks" when mouse leaves the div
   useEffect(() => {
-    const stop = () => { isDragging.current = false; setDragging(false); };
-    window.addEventListener("mouseup", stop);
-    return () => window.removeEventListener("mouseup", stop);
+    const onMove = (e: MouseEvent) => {
+      if (!isDragging.current || !scrollRef.current) return;
+      const walk = (e.pageX - startX.current) * 1.2;
+      scrollRef.current.scrollLeft = scrollLeft.current - walk;
+    };
+    const onUp = () => {
+      isDragging.current = false;
+      setDragging(false);
+    };
+    window.addEventListener("mousemove", onMove);
+    window.addEventListener("mouseup", onUp);
+    return () => {
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("mouseup", onUp);
+    };
   }, []);
 
   type LayoutItem = {
@@ -167,17 +167,15 @@ export default function Timeline() {
       {/* ── Horizontal draggable timeline canvas ── */}
       <div
         ref={scrollRef}
-        className="flex-1 overflow-x-scroll overflow-y-hidden relative"
+        className="flex-1 overflow-x-scroll relative"
         style={{
           cursor: dragging ? "grabbing" : "grab",
           userSelect: "none",
           scrollbarWidth: "none",
           backgroundColor: "#FFFBE9",
+          overflowY: "visible",
         }}
         onMouseDown={onMouseDown}
-        onMouseMove={onMouseMove}
-        onMouseUp={onMouseUp}
-        onMouseLeave={onMouseUp}
       >
         <style>{`::-webkit-scrollbar { display: none; }`}</style>
 
