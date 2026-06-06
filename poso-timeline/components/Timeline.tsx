@@ -4,7 +4,7 @@ import { useRef, useState, useCallback, useEffect } from "react";
 import { timelineData, CATEGORY_COLORS } from "@/data/timeline";
 import TimelineCard from "./TimelineCard";
 
-const EVENT_WIDTH   = 300;
+const EVENT_WIDTH    = 300;
 const SUBTITLE_WIDTH = 320;
 const CARD_AREA_HEIGHT = 320;
 const LINE_Y = CARD_AREA_HEIGHT;
@@ -12,33 +12,72 @@ const LINE_Y = CARD_AREA_HEIGHT;
 const NAV_ITEMS = ["About", "Methodology", "Reading Room"];
 
 const LEGEND_ITEMS = [
-  { label: "Kalla Oligarch & Business",              color: "#FE973B" },
-  { label: "National Politics of Hydropower",        color: "#F8BA43" },
-  { label: "Socio-Environmental Violence",           color: "#FBA18C" },
-  { label: "Community Resistance",                   color: "#D3D477" },
+  { label: "Kalla Oligarch & Business",                 color: "#FE973B" },
+  { label: "National Politics of Hydropower",           color: "#F8BA43" },
+  { label: "Socio-Environmental Violence",              color: "#FBA18C" },
+  { label: "Community Resistance",                      color: "#D3D477" },
   { label: "Conflict, Militarisation & Securitisation", color: "#E94B3F" },
-  { label: "Human Rights Interventions",             color: "#9EC9EF" },
-  { label: "Public Donations / Church Relations",    color: "#A98067" },
+  { label: "Human Rights Interventions",                color: "#9EC9EF" },
+  { label: "Public Donations / Church Relations",       color: "#A98067" },
 ];
+
+const PAGE_TITLE =
+  "Unfolding Socio-Environmental Violence of the Hydroelectric Infrastructure Violence in Poso Lake Watershed";
+
+/** Wrap each word in its own highlight span with white gaps between */
+function HighlightedTitle({ text, bg }: { text: string; bg: string }) {
+  const words = text.split(" ");
+  return (
+    <h1
+      style={{
+        fontFamily: "var(--font-ocr)",
+        fontSize: "28px",
+        fontWeight: 400,
+        lineHeight: 1.6,
+        letterSpacing: "0.02em",
+        color: "#1a1208",
+      }}
+    >
+      {words.map((word, i) => (
+        <span key={i}>
+          <span
+            style={{
+              backgroundColor: bg,
+              padding: "1px 5px",
+              display: "inline",
+            }}
+          >
+            {word}
+          </span>
+          {i < words.length - 1 && " "}
+        </span>
+      ))}
+    </h1>
+  );
+}
 
 export default function Timeline() {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const rulerRef  = useRef<HTMLDivElement>(null);   // ← synced ruler
   const isDragging = useRef(false);
-  const startX    = useRef(0);
+  const startX     = useRef(0);
   const scrollLeft = useRef(0);
   const [dragging, setDragging] = useState(false);
 
+  /* ── drag ── */
   const onMouseDown = useCallback((e: React.MouseEvent) => {
     isDragging.current = true;
     setDragging(true);
-    startX.current    = e.pageX;
+    startX.current     = e.pageX;
     scrollLeft.current = scrollRef.current?.scrollLeft ?? 0;
   }, []);
 
   useEffect(() => {
     const onMove = (e: MouseEvent) => {
       if (!isDragging.current || !scrollRef.current) return;
-      scrollRef.current.scrollLeft = scrollLeft.current - (e.pageX - startX.current) * 1.2;
+      const next = scrollLeft.current - (e.pageX - startX.current) * 1.2;
+      scrollRef.current.scrollLeft = next;
+      if (rulerRef.current) rulerRef.current.scrollLeft = next; // keep ruler in sync
     };
     const onUp = () => { isDragging.current = false; setDragging(false); };
     window.addEventListener("mousemove", onMove);
@@ -49,6 +88,17 @@ export default function Timeline() {
     };
   }, []);
 
+  /* also sync ruler when scrollRef is scrolled by other means (trackpad etc.) */
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const onScroll = () => {
+      if (rulerRef.current) rulerRef.current.scrollLeft = el.scrollLeft;
+    };
+    el.addEventListener("scroll", onScroll, { passive: true });
+    return () => el.removeEventListener("scroll", onScroll);
+  }, []);
+
   /* ── build layout ── */
   type LayoutItem = {
     event: (typeof timelineData)[number];
@@ -57,7 +107,7 @@ export default function Timeline() {
     isSubtitle: boolean;
   };
   const items: LayoutItem[] = [];
-  let cursor = 80;
+  let cursor    = 80;
   let sideToggle = 0;
   for (const event of timelineData) {
     if (event.category === "subtitle") {
@@ -69,24 +119,27 @@ export default function Timeline() {
       sideToggle++;
     }
   }
-  const totalWidth  = cursor + 200;
+  const totalWidth   = cursor + 200;
   const canvasHeight = CARD_AREA_HEIGHT * 2 + 1;
+
+  const uniqueYears = Array.from(
+    new Set(timelineData.map((e) => e.year.slice(0, 4)).filter((y) => /^\d{4}$/.test(y)))
+  );
 
   return (
     <div className="flex h-screen overflow-hidden" style={{ backgroundColor: "#FFFBE9", color: "#1a1208" }}>
 
-      {/* ════════════════════════════════════════
-          LEFT SIDEBAR
-      ════════════════════════════════════════ */}
+      {/* ══════════════════════════════
+          LEFT SIDEBAR  (#FEC2C2)
+      ══════════════════════════════ */}
       <aside
         className="flex-shrink-0 flex flex-col justify-between py-8 px-5"
         style={{
           width: "180px",
-          borderRight: "1px solid rgba(26,18,8,0.08)",
-          backgroundColor: "#FFFBE9",
+          borderRight: "1px solid rgba(26,18,8,0.1)",
+          backgroundColor: "#FEC2C2",
         }}
       >
-        {/* Nav links in boxes */}
         <nav className="flex flex-col gap-3">
           {NAV_ITEMS.map((item) => (
             <a
@@ -99,11 +152,12 @@ export default function Timeline() {
                 color: "#1a1208",
                 textDecoration: "none",
                 padding: "8px 12px",
-                border: "1px solid rgba(26,18,8,0.18)",
+                border: "1px solid rgba(26,18,8,0.2)",
                 display: "block",
+                backgroundColor: "transparent",
                 transition: "background 0.15s",
               }}
-              onMouseEnter={e => (e.currentTarget.style.backgroundColor = "#FEC2C2")}
+              onMouseEnter={e => (e.currentTarget.style.backgroundColor = "rgba(26,18,8,0.08)")}
               onMouseLeave={e => (e.currentTarget.style.backgroundColor = "transparent")}
             >
               {item}
@@ -111,60 +165,40 @@ export default function Timeline() {
           ))}
         </nav>
 
-        {/* Map / Sulawesi silhouette + lang */}
         <div className="flex flex-col items-start gap-2">
           <svg width="38" height="52" viewBox="0 0 38 52" fill="none">
             <path
               d="M19 2 C10 8 4 18 6 28 C8 36 14 42 16 50 C17 46 20 40 24 36 C30 30 36 22 34 14 C32 6 26 0 19 2Z"
-              fill="#2d4a38"
-              opacity="0.8"
+              fill="#2d4a38" opacity="0.75"
             />
           </svg>
-          <span style={{ fontFamily: "var(--font-hanken)", fontSize: "10px", color: "rgba(26,18,8,0.35)", letterSpacing: "0.1em" }}>
+          <span style={{ fontFamily: "var(--font-hanken)", fontSize: "10px", color: "rgba(26,18,8,0.4)", letterSpacing: "0.1em" }}>
             EN / IDN
           </span>
         </div>
       </aside>
 
-      {/* ════════════════════════════════════════
+      {/* ══════════════════════════════
           MAIN CONTENT
-      ════════════════════════════════════════ */}
+      ══════════════════════════════ */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
 
-        {/* ── Top bar: title left, legend right ── */}
+        {/* ── Header: title + legend ── */}
         <div
           className="flex-shrink-0 flex items-start justify-between gap-6 px-8 pt-7 pb-5 border-b"
           style={{ borderColor: "rgba(26,18,8,0.07)" }}
         >
-          {/* Title block */}
-          <div style={{ maxWidth: "660px" }}>
-            <h1
-              style={{
-                fontFamily: "var(--font-ocr)",
-                fontSize: "28px",
-                fontWeight: 400,
-                lineHeight: 1.25,
-                letterSpacing: "0.02em",
-                color: "#1a1208",
-                backgroundColor: "#FEC2C2",
-                display: "inline",
-                boxDecorationBreak: "clone",
-                WebkitBoxDecorationBreak: "clone",
-                padding: "2px 6px",
-                marginBottom: "12px",
-              }}
-            >
-              Unfolding Socio-Environmental Violence of the Hydroelectric
-              Infrastructure Violence in Poso Lake Watershed
-            </h1>
+          {/* Title with per-word highlight */}
+          <div style={{ maxWidth: "620px" }}>
+            <HighlightedTitle text={PAGE_TITLE} bg="#FEC2C2" />
             <p
               style={{
                 fontFamily: "var(--font-inter)",
                 fontSize: "12px",
                 lineHeight: 1.7,
                 color: "rgba(26,18,8,0.5)",
-                marginTop: "14px",
-                maxWidth: "600px",
+                marginTop: "12px",
+                maxWidth: "580px",
               }}
             >
               This timeline analysis aims to understand the Poso Energy Hydroelectric Dam in
@@ -175,30 +209,19 @@ export default function Timeline() {
           </div>
 
           {/* Legend — top right */}
-          <div
-            className="flex-shrink-0 flex flex-col gap-2 pt-1"
-            style={{ minWidth: "230px" }}
-          >
+          <div className="flex-shrink-0 flex flex-col gap-2 pt-1" style={{ minWidth: "240px" }}>
             {LEGEND_ITEMS.map((item) => (
               <div key={item.label} className="flex items-center gap-0">
-                <span
-                  style={{
-                    display: "inline-block",
-                    width: "14px",
-                    height: "14px",
-                    backgroundColor: item.color,
-                    flexShrink: 0,
-                  }}
-                />
+                <span style={{ display: "inline-block", width: "14px", height: "14px", backgroundColor: item.color, flexShrink: 0 }} />
                 <span
                   style={{
                     fontFamily: "var(--font-hanken)",
                     fontSize: "11px",
                     color: "#1a1208",
-                    backgroundColor: item.color + "55",
-                    padding: "1px 7px 1px 6px",
+                    backgroundColor: item.color + "66",
+                    padding: "1px 8px 1px 6px",
                     display: "inline-block",
-                    lineHeight: 1.6,
+                    lineHeight: 1.7,
                   }}
                 >
                   {item.label}
@@ -236,33 +259,20 @@ export default function Timeline() {
         >
           <style>{`::-webkit-scrollbar{display:none}`}</style>
 
-          <div
-            className="relative"
-            style={{ width: `${totalWidth}px`, height: `${canvasHeight}px`, minWidth: "100%" }}
-          >
+          <div className="relative" style={{ width: `${totalWidth}px`, height: `${canvasHeight}px`, minWidth: "100%" }}>
             {/* Centre hairline */}
-            <div
-              className="absolute left-0"
-              style={{
-                top: `${LINE_Y}px`,
-                height: "1px",
-                width: `${totalWidth}px`,
-                backgroundColor: "rgba(26,18,8,0.12)",
-              }}
-            />
+            <div className="absolute left-0" style={{ top: `${LINE_Y}px`, height: "1px", width: `${totalWidth}px`, backgroundColor: "rgba(26,18,8,0.12)" }} />
 
             {items.map((item) => {
-              /* ── SUBTITLE / REGIME DIVIDER ── */
+              /* ── REGIME DIVIDER ── */
               if (item.isSubtitle) {
                 return (
                   <div
                     key={item.event.id}
                     className="absolute"
                     style={{
-                      left: `${item.x}px`,
-                      top: 0,
-                      width: `${SUBTITLE_WIDTH}px`,
-                      height: `${canvasHeight}px`,
+                      left: `${item.x}px`, top: 0,
+                      width: `${SUBTITLE_WIDTH}px`, height: `${canvasHeight}px`,
                       borderLeft: "2px solid #FBAE84",
                       borderRight: "1px solid rgba(26,18,8,0.05)",
                       backgroundColor: "#FDEBD8",
@@ -276,10 +286,7 @@ export default function Timeline() {
                         {item.event.keyEvent}
                       </p>
                     </div>
-
-                    {/* Centre rule */}
                     <div className="absolute left-5 right-5" style={{ top: `${LINE_Y}px`, height: "1.5px", backgroundColor: "rgba(26,18,8,0.15)" }} />
-
                     {item.event.description && (
                       <div className="absolute px-5" style={{ top: `${LINE_Y + 16}px`, maxWidth: `${SUBTITLE_WIDTH}px` }}>
                         <p style={{ fontFamily: "var(--font-inter)", fontSize: "14px", lineHeight: 1.7, color: "rgba(26,18,8,0.65)" }}>
@@ -294,12 +301,7 @@ export default function Timeline() {
               /* ── REGULAR EVENT ── */
               const colors = CATEGORY_COLORS[item.event.category];
               return (
-                <div
-                  key={item.event.id}
-                  className="absolute"
-                  style={{ left: `${item.x}px`, top: 0, height: `${canvasHeight}px` }}
-                >
-                  {/* Dot */}
+                <div key={item.event.id} className="absolute" style={{ left: `${item.x}px`, top: 0, height: `${canvasHeight}px` }}>
                   <div
                     className="absolute rounded-full"
                     style={{
@@ -320,21 +322,31 @@ export default function Timeline() {
           </div>
         </div>
 
-        {/* ── Year ruler ── */}
+        {/* ── Year ruler — synced, no pointer events so drag passes through ── */}
         <div
-          className="flex-shrink-0 border-t overflow-hidden"
-          style={{ borderColor: "rgba(26,18,8,0.07)", height: "44px", backgroundColor: "#FFF7DC" }}
+          className="flex-shrink-0 border-t"
+          style={{ borderColor: "rgba(26,18,8,0.07)", height: "44px", backgroundColor: "#FFF7DC", overflow: "hidden" }}
         >
-          <div className="flex items-center h-full pl-20" style={{ width: `${totalWidth}px` }}>
-            {Array.from(
-              new Set(timelineData.map((e) => e.year.slice(0, 4)).filter((y) => /^\d{4}$/.test(y)))
-            ).map((y) => (
-              <span key={y} style={{ display: "inline-block", minWidth: `${EVENT_WIDTH}px`, fontFamily: "var(--font-ocr)", fontSize: "14px", letterSpacing: "0.06em" }}>
-                <span style={{ backgroundColor: "#E94B3F", color: "#fff", padding: "2px 6px", display: "inline-block", lineHeight: 1.4 }}>
-                  {y}
+          <div
+            ref={rulerRef}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              height: "100%",
+              overflowX: "hidden",   // hidden — scrollLeft controlled by JS
+              scrollbarWidth: "none",
+              pointerEvents: "none", // ruler follows timeline; drag on timeline div
+            }}
+          >
+            <div className="flex items-center h-full" style={{ paddingLeft: "80px", width: `${totalWidth}px`, flexShrink: 0 }}>
+              {uniqueYears.map((y) => (
+                <span key={y} style={{ display: "inline-block", minWidth: `${EVENT_WIDTH}px`, fontFamily: "var(--font-ocr)", fontSize: "14px", letterSpacing: "0.06em" }}>
+                  <span style={{ backgroundColor: "#E94B3F", color: "#fff", padding: "2px 6px", display: "inline-block", lineHeight: 1.4 }}>
+                    {y}
+                  </span>
                 </span>
-              </span>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </div>
