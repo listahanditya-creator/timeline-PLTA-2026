@@ -48,29 +48,29 @@ export default function TimelineCard({ event, position }: Props) {
 
         <div className="pl-4 pr-3 py-3">
 
-          {/* ── YEAR — OCR A Extended, largest in card ── */}
+          {/* ── YEAR — OCR A Extended 28px, red highlight ── */}
           <p
             style={{
               fontFamily: "var(--font-ocr)",
-              fontSize: "15px",
-              letterSpacing: "0.06em",
-              color: colors.dot,
-              marginBottom: "3px",
-              lineHeight: 1.2,
+              fontSize: "28px",
+              letterSpacing: "0.04em",
+              color: "#E94B3F",
+              marginBottom: "2px",
+              lineHeight: 1.1,
               fontVariantNumeric: "tabular-nums",
             }}
           >
-            {event.date ? `${event.year}` : event.year}
+            {event.year}
           </p>
 
-          {/* Date (if present) — smaller OCR */}
+          {/* Date (if present) — smaller OCR, red tint */}
           {event.date && (
             <p
               style={{
                 fontFamily: "var(--font-ocr)",
-                fontSize: "10px",
+                fontSize: "11px",
                 letterSpacing: "0.08em",
-                color: colors.dot,
+                color: "#E94B3F",
                 opacity: 0.75,
                 marginBottom: "6px",
               }}

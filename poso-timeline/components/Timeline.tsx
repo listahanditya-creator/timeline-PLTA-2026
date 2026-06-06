@@ -6,7 +6,7 @@ import TimelineCard from "./TimelineCard";
 import Legend from "./Legend";
 
 const EVENT_WIDTH = 300;
-const SUBTITLE_WIDTH = 230;
+const SUBTITLE_WIDTH = 270;
 const CARD_AREA_HEIGHT = 320;  // more room above & below the line
 const LINE_Y = CARD_AREA_HEIGHT;
 
@@ -196,7 +196,6 @@ export default function Timeline() {
 
           {items.map((item) => {
             if (item.isSubtitle) {
-              const colors = CATEGORY_COLORS["subtitle"];
               return (
                 <div
                   key={item.event.id}
@@ -206,20 +205,20 @@ export default function Timeline() {
                     top: 0,
                     width: `${SUBTITLE_WIDTH}px`,
                     height: `${canvasHeight}px`,
-                    borderLeft: `1.5px solid ${colors.border}`,
-                    borderRight: `1px solid rgba(26,18,8,0.05)`,
-                    backgroundColor: colors.bg,
+                    borderLeft: "2px solid #c0503e",
+                    borderRight: "1px solid rgba(26,18,8,0.06)",
+                    backgroundColor: "#F0816D",
                   }}
                 >
-                  {/* Era label top */}
-                  <div className="absolute px-4 pt-5">
+                  {/* Era label — top half */}
+                  <div className="absolute px-5 pt-6" style={{ maxWidth: `${SUBTITLE_WIDTH}px` }}>
                     <p
                       style={{
                         fontFamily: "var(--font-ocr)",
-                        fontSize: "13px",
-                        letterSpacing: "0.06em",
-                        color: "rgba(26,18,8,0.5)",
-                        marginBottom: "6px",
+                        fontSize: "15px",
+                        letterSpacing: "0.05em",
+                        color: "rgba(255,255,255,0.8)",
+                        marginBottom: "8px",
                       }}
                     >
                       {item.event.year}
@@ -227,42 +226,43 @@ export default function Timeline() {
                     <p
                       style={{
                         fontFamily: "var(--font-hanken)",
-                        fontSize: "13px",
-                        fontWeight: 600,
-                        lineHeight: 1.35,
-                        color: "#1a1208",
-                        maxWidth: "175px",
+                        fontSize: "16px",
+                        fontWeight: 700,
+                        lineHeight: 1.3,
+                        color: "#fff",
+                        maxWidth: "185px",
                       }}
                     >
                       {item.event.keyEvent}
                     </p>
                   </div>
 
-                  {/* Stronger line at centre */}
+                  {/* Centre rule */}
                   <div
-                    className="absolute left-4 right-4"
+                    className="absolute left-5 right-5"
                     style={{
                       top: `${LINE_Y}px`,
                       height: "1.5px",
-                      backgroundColor: colors.border,
+                      backgroundColor: "rgba(255,255,255,0.4)",
                     }}
                   />
 
-                  {/* Short description below */}
+                  {/* Description — below line */}
                   {item.event.description && (
                     <div
-                      className="absolute px-4"
-                      style={{ top: `${LINE_Y + 14}px`, maxWidth: "195px" }}
+                      className="absolute px-5"
+                      style={{ top: `${LINE_Y + 16}px`, maxWidth: `${SUBTITLE_WIDTH}px` }}
                     >
                       <p
-                        className="text-[9px] leading-relaxed"
                         style={{
                           fontFamily: "var(--font-inter)",
-                          color: "rgba(26,18,8,0.38)",
+                          fontSize: "11px",
+                          lineHeight: 1.65,
+                          color: "rgba(255,255,255,0.75)",
                         }}
                       >
-                        {item.event.description.slice(0, 200)}
-                        {item.event.description.length > 200 ? "…" : ""}
+                        {item.event.description.slice(0, 260)}
+                        {item.event.description.length > 260 ? "…" : ""}
                       </p>
                     </div>
                   )}
