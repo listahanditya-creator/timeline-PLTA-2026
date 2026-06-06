@@ -17,7 +17,7 @@ export default function TimelineCard({ event, position }: Props) {
       className={`absolute ${
         position === "above" ? "bottom-[calc(100%+20px)]" : "top-[calc(100%+20px)]"
       } left-0`}
-      style={{ width: "270px" }}
+      style={{ width: "260px" }}
     >
       {/* Connector line from dot to card */}
       <div
@@ -93,13 +93,13 @@ export default function TimelineCard({ event, position }: Props) {
             {CATEGORY_COLORS[event.category].label}
           </p>
 
-          {/* ── KEY EVENT — Hanken Grotesk, medium, second in hierarchy ── */}
+          {/* ── KEY EVENT — Hanken Grotesk, matches regime divider size ── */}
           <h3
             style={{
               fontFamily: "var(--font-hanken)",
-              fontSize: "14px",
-              fontWeight: 600,
-              lineHeight: 1.35,
+              fontSize: "18px",
+              fontWeight: 700,
+              lineHeight: 1.3,
               color: "#1a1208",
               marginBottom: expanded ? "10px" : "6px",
             }}
