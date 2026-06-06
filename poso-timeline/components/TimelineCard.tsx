@@ -86,7 +86,7 @@ export default function TimelineCard({ event, position }: Props) {
               fontSize: "9px",
               letterSpacing: "0.12em",
               textTransform: "uppercase",
-              color: "rgba(26,18,8,0.33)",
+              color: "rgba(26,18,8,0.55)",
               marginBottom: "8px",
             }}
           >
@@ -118,9 +118,9 @@ export default function TimelineCard({ event, position }: Props) {
             <p
               style={{
                 fontFamily: "var(--font-inter)",
-                fontSize: "12px",
-                lineHeight: 1.7,
-                color: "rgba(26,18,8,0.62)",
+                fontSize: "14px",
+                lineHeight: 1.75,
+                color: "rgba(26,18,8,0.82)",
                 whiteSpace: "pre-line",
               }}
             >

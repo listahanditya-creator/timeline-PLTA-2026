@@ -24,34 +24,21 @@ const LEGEND_ITEMS = [
 const PAGE_TITLE =
   "Unfolding Socio-Environmental Violence of the Hydroelectric Infrastructure Violence in Poso Lake Watershed";
 
-/** Wrap each word in its own highlight span with white gaps between */
+/** Title with continuous highlight per line, vertical white gaps between lines */
 function HighlightedTitle({ text, bg }: { text: string; bg: string }) {
-  const words = text.split(" ");
   return (
-    <h1
-      style={{
-        fontFamily: "var(--font-ocr)",
-        fontSize: "28px",
-        fontWeight: 400,
-        lineHeight: 1.6,
-        letterSpacing: "0.02em",
-        color: "#1a1208",
-      }}
-    >
-      {words.map((word, i) => (
-        <span key={i}>
-          <span
-            style={{
-              backgroundColor: bg,
-              padding: "1px 5px",
-              display: "inline",
-            }}
-          >
-            {word}
-          </span>
-          {i < words.length - 1 && " "}
-        </span>
-      ))}
+    <h1 style={{ fontFamily: "var(--font-ocr)", fontSize: "28px", fontWeight: 400, lineHeight: 2, letterSpacing: "0.02em", color: "#1a1208" }}>
+      <span
+        style={{
+          backgroundColor: bg,
+          padding: "2px 6px",
+          display: "inline",
+          boxDecorationBreak: "clone",
+          WebkitBoxDecorationBreak: "clone",
+        }}
+      >
+        {text}
+      </span>
     </h1>
   );
 }
@@ -165,17 +152,7 @@ export default function Timeline() {
           ))}
         </nav>
 
-        <div className="flex flex-col items-start gap-2">
-          <svg width="38" height="52" viewBox="0 0 38 52" fill="none">
-            <path
-              d="M19 2 C10 8 4 18 6 28 C8 36 14 42 16 50 C17 46 20 40 24 36 C30 30 36 22 34 14 C32 6 26 0 19 2Z"
-              fill="#2d4a38" opacity="0.75"
-            />
-          </svg>
-          <span style={{ fontFamily: "var(--font-hanken)", fontSize: "10px", color: "rgba(26,18,8,0.4)", letterSpacing: "0.1em" }}>
-            EN / IDN
-          </span>
-        </div>
+        <div />
       </aside>
 
       {/* ══════════════════════════════
@@ -194,10 +171,10 @@ export default function Timeline() {
             <p
               style={{
                 fontFamily: "var(--font-inter)",
-                fontSize: "12px",
-                lineHeight: 1.7,
-                color: "rgba(26,18,8,0.5)",
-                marginTop: "12px",
+                fontSize: "15px",
+                lineHeight: 1.75,
+                color: "rgba(26,18,8,0.8)",
+                marginTop: "14px",
                 maxWidth: "580px",
               }}
             >
