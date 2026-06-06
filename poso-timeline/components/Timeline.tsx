@@ -102,35 +102,28 @@ function RegimeDescription({ text, top, width }: { text: string; top: number; wi
 }
 
 export default function Timeline() {
-  const wrapperRef   = useRef<HTMLDivElement>(null);
-  const canvasRef    = useRef<HTMLDivElement>(null);   // direct DOM target for transform
-  const rulerRef     = useRef<HTMLDivElement>(null);
-  const isDragging   = useRef(false);
-  const startX       = useRef(0);
-  const startScroll  = useRef(0);
-  const scrollPos    = useRef(0);                      // no state — pure ref
-  const [dragging,   setDragging] = useState(false);  // only for cursor style
+  const scrollRef  = useRef<HTMLDivElement>(null);
+  const rulerRef   = useRef<HTMLDivElement>(null);
+  const isDragging = useRef(false);
+  const startX     = useRef(0);
+  const startLeft  = useRef(0);
+  const [dragging, setDragging] = useState(false);
 
-  /* ── drag: all updates are imperative (zero re-renders during drag) ── */
   const onMouseDown = useCallback((e: React.MouseEvent) => {
-    isDragging.current  = true;
+    isDragging.current = true;
     setDragging(true);
-    startX.current      = e.pageX;
-    startScroll.current = scrollPos.current;
+    startX.current    = e.pageX;
+    startLeft.current = scrollRef.current?.scrollLeft ?? 0;
   }, []);
 
   useEffect(() => {
     const move = (e: MouseEvent) => {
-      if (!isDragging.current || !wrapperRef.current || !canvasRef.current) return;
-      const maxScroll = Math.max(0, canvasRef.current.offsetWidth - wrapperRef.current.clientWidth);
-      const next = Math.max(0, Math.min(
-        startScroll.current + (startX.current - e.pageX) * 1.2,
-        maxScroll
-      ));
-      scrollPos.current = next;
-      // Imperatively set transforms — no setState, no re-render
-      canvasRef.current.style.transform  = `translateX(-${next}px)`;
-      if (rulerRef.current) rulerRef.current.style.transform = `translateX(-${next}px)`;
+      if (!isDragging.current || !scrollRef.current) return;
+      const next = startLeft.current - (e.pageX - startX.current) * 1.2;
+      scrollRef.current.scrollLeft = next;
+      // Sync ruler by shifting its inner content div
+      const inner = rulerRef.current?.firstElementChild as HTMLElement | null;
+      if (inner) inner.style.transform = `translateX(-${next}px)`;
     };
     const up = () => { isDragging.current = false; setDragging(false); };
     window.addEventListener("mousemove", move);
@@ -139,6 +132,18 @@ export default function Timeline() {
       window.removeEventListener("mousemove", move);
       window.removeEventListener("mouseup",   up);
     };
+  }, []);
+
+  // Sync ruler on native scroll (trackpad / scrollbar)
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const onScroll = () => {
+      const inner = rulerRef.current?.firstElementChild as HTMLElement | null;
+      if (inner) inner.style.transform = `translateX(-${el.scrollLeft}px)`;
+    };
+    el.addEventListener("scroll", onScroll, { passive: true });
+    return () => el.removeEventListener("scroll", onScroll);
   }, []);
 
   /* ── build layout ── */
@@ -286,28 +291,22 @@ export default function Timeline() {
         </div>
 
         {/* ── Horizontal draggable timeline ── */}
-        {/* Outer: clips only horizontally; overflow-y is truly visible */}
+        {/* overflow-x: scroll + overflow-y: clip — clip doesn't create a scroll
+            container so the browser won't promote overflow-y to auto */}
         <div
-          ref={wrapperRef}
-          className="flex-1 relative"
+          ref={scrollRef}
+          className="flex-1"
           style={{
-            overflow: "hidden",           // clips x; y stays open via canvas overflow
+            overflowX: "scroll",
+            overflowY: "clip",            // ← breaks the overflow-x/y conflict
             cursor: dragging ? "grabbing" : "grab",
             userSelect: "none",
+            scrollbarWidth: "none",
             backgroundColor: "#FFFBE9",
           }}
           onMouseDown={onMouseDown}
         >
-          {/* Canvas moves via imperative transform — zero re-renders during drag */}
-          <div
-            ref={canvasRef}
-            style={{
-              transform: `translateX(0px)`,
-              willChange: "transform",
-              width: `${totalWidth}px`,
-              minWidth: "100%",
-            }}
-          >
+          <style>{`::-webkit-scrollbar{display:none}`}</style>
           <div className="relative" style={{ width: `${totalWidth}px`, height: `${canvasHeight}px` }}>
             {/* Centre line — drawn as segments that skip subtitle columns */}
             {(() => {
@@ -385,25 +384,29 @@ export default function Timeline() {
               );
             })}
           </div>
-          </div>  {/* end transform wrapper */}
         </div>
 
-        {/* ── Year ruler — synced, absolutely positioned labels matching canvas ── */}
+        {/* ── Year ruler — scrollLeft synced to main timeline ── */}
         <div
           className="flex-shrink-0 border-t"
-          style={{ borderColor: "rgba(26,18,8,0.07)", height: "44px", backgroundColor: "#FFF7DC", overflow: "hidden" }}
+          style={{ borderColor: "rgba(26,18,8,0.07)", height: "44px", backgroundColor: "#FFF7DC" }}
         >
           <div
-            style={{ overflow: "hidden", height: "100%", pointerEvents: "none" }}
+            ref={rulerRef}
+            style={{
+              overflowX: "hidden",
+              overflowY: "clip",
+              height: "100%",
+              width: "100%",
+              pointerEvents: "none",
+              position: "relative",
+            }}
           >
           <div
-            ref={rulerRef}
             style={{
               position: "relative",
               height: "100%",
               width: `${totalWidth}px`,
-              transform: `translateX(0px)`,
-              willChange: "transform",
             }}
           >
             {yearPositions.map(({ year, x }) => (
