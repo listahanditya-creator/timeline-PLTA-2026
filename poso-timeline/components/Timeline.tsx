@@ -6,7 +6,7 @@ import TimelineCard from "./TimelineCard";
 
 const EVENT_WIDTH    = 360;
 const SUBTITLE_WIDTH = 320;
-const CARD_AREA_HEIGHT = 320;
+const CARD_AREA_HEIGHT = 440;   // tall enough for expanded above-cards
 const LINE_Y = CARD_AREA_HEIGHT;
 
 const NAV_ITEMS = ["About", "Methodology", "Reading Room"];
@@ -102,27 +102,35 @@ function RegimeDescription({ text, top, width }: { text: string; top: number; wi
 }
 
 export default function Timeline() {
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const rulerRef  = useRef<HTMLDivElement>(null);   // ← synced ruler
+  const wrapperRef = useRef<HTMLDivElement>(null);  // outer clip container
+  const rulerRef   = useRef<HTMLDivElement>(null);
   const isDragging = useRef(false);
   const startX     = useRef(0);
-  const scrollLeft = useRef(0);
+  const [scrollPos, setScrollPos] = useState(0);
+  const scrollPosRef = useRef(0);           // mirror for use inside closures
   const [dragging, setDragging] = useState(false);
+  const [totalW,   setTotalW]   = useState(0); // set after layout
 
-  /* ── drag ── */
+  /* ── drag (transform-based so overflow-y stays truly visible) ── */
   const onMouseDown = useCallback((e: React.MouseEvent) => {
     isDragging.current = true;
     setDragging(true);
-    startX.current     = e.pageX;
-    scrollLeft.current = scrollRef.current?.scrollLeft ?? 0;
+    startX.current = e.pageX;
   }, []);
 
   useEffect(() => {
     const onMove = (e: MouseEvent) => {
-      if (!isDragging.current || !scrollRef.current) return;
-      const next = scrollLeft.current - (e.pageX - startX.current) * 1.2;
-      scrollRef.current.scrollLeft = next;
-      if (rulerRef.current) rulerRef.current.scrollLeft = next; // keep ruler in sync
+      if (!isDragging.current || !wrapperRef.current) return;
+      const containerW = wrapperRef.current.clientWidth;
+      const maxScroll  = Math.max(0, totalW - containerW);
+      const next = Math.max(0, Math.min(
+        scrollPosRef.current - (e.pageX - startX.current) * 1.2,
+        maxScroll
+      ));
+      startX.current = e.pageX;
+      scrollPosRef.current = next;
+      setScrollPos(next);
+      if (rulerRef.current) rulerRef.current.style.transform = `translateX(-${next}px)`;
     };
     const onUp = () => { isDragging.current = false; setDragging(false); };
     window.addEventListener("mousemove", onMove);
@@ -131,18 +139,7 @@ export default function Timeline() {
       window.removeEventListener("mousemove", onMove);
       window.removeEventListener("mouseup",   onUp);
     };
-  }, []);
-
-  /* also sync ruler when scrollRef is scrolled by other means (trackpad etc.) */
-  useEffect(() => {
-    const el = scrollRef.current;
-    if (!el) return;
-    const onScroll = () => {
-      if (rulerRef.current) rulerRef.current.scrollLeft = el.scrollLeft;
-    };
-    el.addEventListener("scroll", onScroll, { passive: true });
-    return () => el.removeEventListener("scroll", onScroll);
-  }, []);
+  }, [totalW]);
 
   /* ── build layout ── */
   type LayoutItem = {
@@ -166,6 +163,8 @@ export default function Timeline() {
   }
   const totalWidth   = cursor + 200;
   const canvasHeight = CARD_AREA_HEIGHT * 2 + 1;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => { setTotalW(totalWidth); }, [totalWidth]);
 
   // Year positions derived from actual item x coordinates — one label per unique year
   const yearPositions: { year: string; x: number }[] = [];
@@ -289,21 +288,28 @@ export default function Timeline() {
         </div>
 
         {/* ── Horizontal draggable timeline ── */}
+        {/* Outer: clips only horizontally; overflow-y is truly visible */}
         <div
-          ref={scrollRef}
-          className="flex-1 overflow-x-scroll relative"
+          ref={wrapperRef}
+          className="flex-1 relative"
           style={{
+            overflow: "hidden",           // clips x; y stays open via canvas overflow
             cursor: dragging ? "grabbing" : "grab",
             userSelect: "none",
-            scrollbarWidth: "none",
             backgroundColor: "#FFFBE9",
-            overflowY: "visible",
           }}
           onMouseDown={onMouseDown}
         >
-          <style>{`::-webkit-scrollbar{display:none}`}</style>
-
-          <div className="relative" style={{ width: `${totalWidth}px`, height: `${canvasHeight}px`, minWidth: "100%" }}>
+          {/* Canvas moves via transform — no overflow-x scroll, so overflow-y is free */}
+          <div
+            style={{
+              transform: `translateX(-${scrollPos}px)`,
+              willChange: "transform",
+              width: `${totalWidth}px`,
+              minWidth: "100%",
+            }}
+          >
+          <div className="relative" style={{ width: `${totalWidth}px`, height: `${canvasHeight}px` }}>
             {/* Centre line — drawn as segments that skip subtitle columns */}
             {(() => {
               const segments: { x: number; w: number }[] = [];
@@ -334,8 +340,7 @@ export default function Timeline() {
                     style={{
                       left: `${item.x}px`, top: 0,
                       width: `${SUBTITLE_WIDTH}px`, height: `${canvasHeight}px`,
-                      borderLeft: "2px solid #FBAE84",
-                      borderRight: "1px solid rgba(26,18,8,0.05)",
+                      border: "1.5px solid #FBAE84",
                       backgroundColor: "#FDEBD8",
                     }}
                   >
@@ -381,6 +386,7 @@ export default function Timeline() {
               );
             })}
           </div>
+          </div>  {/* end transform wrapper */}
         </div>
 
         {/* ── Year ruler — synced, absolutely positioned labels matching canvas ── */}
@@ -389,14 +395,16 @@ export default function Timeline() {
           style={{ borderColor: "rgba(26,18,8,0.07)", height: "44px", backgroundColor: "#FFF7DC", overflow: "hidden" }}
         >
           <div
+            style={{ overflow: "hidden", height: "100%", pointerEvents: "none" }}
+          >
+          <div
             ref={rulerRef}
             style={{
               position: "relative",
               height: "100%",
               width: `${totalWidth}px`,
-              overflowX: "hidden",
-              scrollbarWidth: "none",
-              pointerEvents: "none",
+              transform: `translateX(-${scrollPos}px)`,
+              willChange: "transform",
             }}
           >
             {yearPositions.map(({ year, x }) => (
@@ -425,6 +433,7 @@ export default function Timeline() {
               </div>
             ))}
           </div>
+          </div>  {/* end ruler inner */}
         </div>
       </div>
     </div>

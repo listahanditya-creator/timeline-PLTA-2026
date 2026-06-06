@@ -115,6 +115,7 @@ export default function TimelineCard({ event, position }: Props) {
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
         onClick={() => setPinned((p) => !p)}
+        onMouseDown={(e) => e.stopPropagation()} /* prevent timeline drag starting inside card */
       >
         {/* Left colour bar */}
         <div className="absolute top-0 left-0 bottom-0 w-[3px]" style={{ backgroundColor: colors.dot }} />
