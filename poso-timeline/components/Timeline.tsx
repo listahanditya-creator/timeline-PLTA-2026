@@ -102,32 +102,33 @@ function RegimeDescription({ text, top, width }: { text: string; top: number; wi
 }
 
 export default function Timeline() {
-  const wrapperRef = useRef<HTMLDivElement>(null);  // outer clip container
-  const rulerRef   = useRef<HTMLDivElement>(null);
-  const isDragging = useRef(false);
-  const startX     = useRef(0);
-  const [scrollPos, setScrollPos] = useState(0);
-  const scrollPosRef = useRef(0);           // mirror for use inside closures
-  const [dragging, setDragging] = useState(false);
-  const [totalW,   setTotalW]   = useState(0); // set after layout
+  const wrapperRef    = useRef<HTMLDivElement>(null);
+  const rulerRef      = useRef<HTMLDivElement>(null);
+  const isDragging    = useRef(false);
+  const startX        = useRef(0);
+  const startScroll   = useRef(0);          // scroll pos captured at mousedown
+  const scrollPosRef  = useRef(0);          // always-current scroll pos
+  const [scrollPos,   setScrollPos] = useState(0);
+  const [dragging,    setDragging]  = useState(false);
+  const [totalW,      setTotalW]    = useState(0);
 
-  /* ── drag (transform-based so overflow-y stays truly visible) ── */
+  /* ── drag — transform-based (avoids overflow-x/y CSS conflict) ── */
   const onMouseDown = useCallback((e: React.MouseEvent) => {
     isDragging.current = true;
     setDragging(true);
-    startX.current = e.pageX;
+    startX.current     = e.pageX;
+    startScroll.current = scrollPosRef.current;  // capture position at drag start
   }, []);
 
   useEffect(() => {
     const onMove = (e: MouseEvent) => {
       if (!isDragging.current || !wrapperRef.current) return;
-      const containerW = wrapperRef.current.clientWidth;
-      const maxScroll  = Math.max(0, totalW - containerW);
+      const maxScroll = Math.max(0, totalW - wrapperRef.current.clientWidth);
+      // delta from original mousedown position (not incremental)
       const next = Math.max(0, Math.min(
-        scrollPosRef.current - (e.pageX - startX.current) * 1.2,
+        startScroll.current + (startX.current - e.pageX) * 1.2,
         maxScroll
       ));
-      startX.current = e.pageX;
       scrollPosRef.current = next;
       setScrollPos(next);
       if (rulerRef.current) rulerRef.current.style.transform = `translateX(-${next}px)`;
