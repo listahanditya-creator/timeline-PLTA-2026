@@ -68,24 +68,24 @@ export default function TimelineCard({ event, position }: Props) {
 
         <div style={{ padding: "12px 12px 8px 16px" }}>
           {/* Year */}
-          <p style={{ fontFamily: "var(--font-ocr)", fontSize: "24px", letterSpacing: "0.04em", color: "#E94B3F", lineHeight: 1.1, marginBottom: event.date ? "2px" : "6px", fontVariantNumeric: "tabular-nums" }}>
+          <p style={{ fontFamily: "var(--font-ocr)", fontSize: "18px", letterSpacing: "0.04em", color: "#E94B3F", lineHeight: 1.1, marginBottom: event.date ? "2px" : "5px", fontVariantNumeric: "tabular-nums" }}>
             {event.year}
           </p>
 
           {/* Date */}
           {event.date && (
-            <p style={{ fontFamily: "var(--font-ocr)", fontSize: "11px", letterSpacing: "0.08em", color: "#E94B3F", opacity: 0.75, marginBottom: "6px" }}>
+            <p style={{ fontFamily: "var(--font-ocr)", fontSize: "10px", letterSpacing: "0.08em", color: "#E94B3F", opacity: 0.75, marginBottom: "5px" }}>
               {event.date}
             </p>
           )}
 
           {/* Category label */}
-          <p style={{ fontFamily: "var(--font-hanken)", fontSize: "9px", letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(26,18,8,0.55)", marginBottom: "6px" }}>
+          <p style={{ fontFamily: "var(--font-hanken)", fontSize: "8px", letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(26,18,8,0.55)", marginBottom: "4px" }}>
             {CATEGORY_COLORS[event.category].label}
           </p>
 
           {/* Key event title */}
-          <h3 style={{ fontFamily: "var(--font-hanken)", fontSize: "18px", fontWeight: 700, lineHeight: 1.3, color: "#1a1208", marginBottom: expanded ? "10px" : "0" }}>
+          <h3 style={{ fontFamily: "var(--font-hanken)", fontSize: "13px", fontWeight: 700, lineHeight: 1.3, color: "#1a1208", marginBottom: expanded ? "8px" : "0" }}>
             {event.keyEvent}
           </h3>
         </div>
@@ -97,7 +97,7 @@ export default function TimelineCard({ event, position }: Props) {
               style={{ maxHeight: "260px", overflowY: "auto", padding: "10px 12px 4px 16px", scrollbarWidth: "thin", scrollbarColor: `${colors.dot} transparent` }}
               onClick={(e) => e.stopPropagation()} /* allow text selection without toggling pin */
             >
-              <p style={{ fontFamily: "var(--font-inter)", fontSize: "14px", lineHeight: 1.75, color: "rgba(26,18,8,0.82)", whiteSpace: "pre-line" }}>
+              <p style={{ fontFamily: "var(--font-inter)", fontSize: "12px", lineHeight: 1.7, color: "rgba(26,18,8,0.82)", whiteSpace: "pre-line" }}>
                 {event.description}
               </p>
 
