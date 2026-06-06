@@ -167,9 +167,16 @@ export default function Timeline() {
   const totalWidth   = cursor + 200;
   const canvasHeight = CARD_AREA_HEIGHT * 2 + 1;
 
-  const uniqueYears = Array.from(
-    new Set(timelineData.map((e) => e.year.slice(0, 4)).filter((y) => /^\d{4}$/.test(y)))
-  );
+  // Year positions derived from actual item x coordinates — one label per unique year
+  const yearPositions: { year: string; x: number }[] = [];
+  const seenYears = new Set<string>();
+  for (const item of items) {
+    const y = item.event.year.slice(0, 4);
+    if (/^\d{4}$/.test(y) && !seenYears.has(y)) {
+      seenYears.add(y);
+      yearPositions.push({ year: y, x: item.x });
+    }
+  }
 
   return (
     <div className="flex h-screen overflow-hidden" style={{ backgroundColor: "#FFFBE9", color: "#1a1208" }}>
@@ -376,7 +383,7 @@ export default function Timeline() {
           </div>
         </div>
 
-        {/* ── Year ruler — synced, no pointer events so drag passes through ── */}
+        {/* ── Year ruler — synced, absolutely positioned labels matching canvas ── */}
         <div
           className="flex-shrink-0 border-t"
           style={{ borderColor: "rgba(26,18,8,0.07)", height: "44px", backgroundColor: "#FFF7DC", overflow: "hidden" }}
@@ -384,23 +391,39 @@ export default function Timeline() {
           <div
             ref={rulerRef}
             style={{
-              display: "flex",
-              alignItems: "center",
+              position: "relative",
               height: "100%",
-              overflowX: "hidden",   // hidden — scrollLeft controlled by JS
+              width: `${totalWidth}px`,
+              overflowX: "hidden",
               scrollbarWidth: "none",
-              pointerEvents: "none", // ruler follows timeline; drag on timeline div
+              pointerEvents: "none",
             }}
           >
-            <div className="flex items-center h-full" style={{ paddingLeft: "80px", width: `${totalWidth}px`, flexShrink: 0 }}>
-              {uniqueYears.map((y) => (
-                <span key={y} style={{ display: "inline-block", minWidth: `${EVENT_WIDTH}px`, fontFamily: "var(--font-ocr)", fontSize: "14px", letterSpacing: "0.06em" }}>
-                  <span style={{ backgroundColor: "#E94B3F", color: "#fff", padding: "2px 6px", display: "inline-block", lineHeight: 1.4 }}>
-                    {y}
-                  </span>
+            {yearPositions.map(({ year, x }) => (
+              <div
+                key={year}
+                style={{
+                  position: "absolute",
+                  left: `${x}px`,
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                }}
+              >
+                <span style={{
+                  backgroundColor: "#E94B3F",
+                  color: "#fff",
+                  padding: "2px 6px",
+                  fontFamily: "var(--font-ocr)",
+                  fontSize: "13px",
+                  letterSpacing: "0.06em",
+                  display: "inline-block",
+                  lineHeight: 1.4,
+                  whiteSpace: "nowrap",
+                }}>
+                  {year}
                 </span>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
