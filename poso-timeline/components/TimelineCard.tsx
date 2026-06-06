@@ -63,7 +63,7 @@ export default function TimelineCard({ event, position }: Props) {
         }}
         onClick={(e) => e.stopPropagation()}
       >
-        <p style={{ fontFamily: "var(--font-inter)", fontSize: "14px", lineHeight: 1.75, color: "rgba(26,18,8,0.82)", whiteSpace: "pre-line" }}>
+        <p style={{ fontFamily: "var(--font-inter)", fontSize: "12px", lineHeight: 1.7, color: "rgba(26,18,8,0.82)", whiteSpace: "pre-line" }}>
           {event.description}
         </p>
 

@@ -67,8 +67,8 @@ function RegimeDescription({ text, top, width }: { text: string; top: number; wi
         <p
           style={{
             fontFamily: "var(--font-inter)",
-            fontSize: "14px",
-            lineHeight: 1.7,
+            fontSize: "11px",
+            lineHeight: 1.65,
             color: "rgba(26,18,8,0.65)",
           }}
         >
@@ -236,10 +236,10 @@ export default function Timeline() {
             <p
               style={{
                 fontFamily: "var(--font-inter)",
-                fontSize: "15px",
-                lineHeight: 1.75,
-                color: "rgba(26,18,8,0.8)",
-                marginTop: "14px",
+                fontSize: "12px",
+                lineHeight: 1.7,
+                color: "rgba(26,18,8,0.7)",
+                marginTop: "12px",
                 maxWidth: "820px",
               }}
             >
