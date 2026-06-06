@@ -27,7 +27,7 @@ const PAGE_TITLE =
 /** Title with continuous highlight per line, vertical white gaps between lines */
 function HighlightedTitle({ text, bg }: { text: string; bg: string }) {
   return (
-    <h1 style={{ fontFamily: "var(--font-ocr)", fontSize: "48px", fontWeight: 400, lineHeight: 1.7, letterSpacing: "0.02em", color: "#1a1208" }}>
+    <h1 style={{ fontFamily: "var(--font-ocr)", fontSize: "32px", fontWeight: 400, lineHeight: 1.7, letterSpacing: "0.02em", color: "#1a1208" }}>
       <span
         style={{
           backgroundColor: bg,
