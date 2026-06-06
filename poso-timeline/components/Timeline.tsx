@@ -4,7 +4,7 @@ import { useRef, useState, useCallback, useEffect } from "react";
 import { timelineData, CATEGORY_COLORS } from "@/data/timeline";
 import TimelineCard from "./TimelineCard";
 
-const EVENT_WIDTH    = 300;
+const EVENT_WIDTH    = 360;
 const SUBTITLE_WIDTH = 320;
 const CARD_AREA_HEIGHT = 320;
 const LINE_Y = CARD_AREA_HEIGHT;
@@ -27,7 +27,7 @@ const PAGE_TITLE =
 /** Title with continuous highlight per line, vertical white gaps between lines */
 function HighlightedTitle({ text, bg }: { text: string; bg: string }) {
   return (
-    <h1 style={{ fontFamily: "var(--font-ocr)", fontSize: "22px", fontWeight: 400, lineHeight: 2, letterSpacing: "0.02em", color: "#1a1208" }}>
+    <h1 style={{ fontFamily: "var(--font-ocr)", fontSize: "48px", fontWeight: 400, lineHeight: 1.7, letterSpacing: "0.02em", color: "#1a1208" }}>
       <span
         style={{
           backgroundColor: bg,
@@ -239,8 +239,25 @@ export default function Timeline() {
           <style>{`::-webkit-scrollbar{display:none}`}</style>
 
           <div className="relative" style={{ width: `${totalWidth}px`, height: `${canvasHeight}px`, minWidth: "100%" }}>
-            {/* Centre hairline */}
-            <div className="absolute left-0" style={{ top: `${LINE_Y}px`, height: "1px", width: `${totalWidth}px`, backgroundColor: "rgba(26,18,8,0.12)" }} />
+            {/* Centre line — drawn as segments that skip subtitle columns */}
+            {(() => {
+              const segments: { x: number; w: number }[] = [];
+              let lineX = 0;
+              for (const it of items) {
+                if (it.isSubtitle) {
+                  if (it.x > lineX) segments.push({ x: lineX, w: it.x - lineX });
+                  lineX = it.x + SUBTITLE_WIDTH;
+                }
+              }
+              segments.push({ x: lineX, w: totalWidth - lineX });
+              return segments.map((seg, i) => (
+                <div
+                  key={i}
+                  className="absolute"
+                  style={{ top: `${LINE_Y}px`, left: `${seg.x}px`, width: `${seg.w}px`, height: "3px", backgroundColor: "#E94B3F" }}
+                />
+              ));
+            })()}
 
             {items.map((item) => {
               /* ── REGIME DIVIDER ── */
@@ -269,7 +286,7 @@ export default function Timeline() {
                     {item.event.description && (
                       <div className="absolute px-5" style={{ top: `${LINE_Y + 16}px`, maxWidth: `${SUBTITLE_WIDTH}px` }}>
                         <p style={{ fontFamily: "var(--font-inter)", fontSize: "14px", lineHeight: 1.7, color: "rgba(26,18,8,0.65)" }}>
-                          {item.event.description.slice(0, 260)}{item.event.description.length > 260 ? "…" : ""}
+                          {item.event.description}
                         </p>
                       </div>
                     )}

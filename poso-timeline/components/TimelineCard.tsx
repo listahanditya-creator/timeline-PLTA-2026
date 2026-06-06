@@ -17,7 +17,7 @@ export default function TimelineCard({ event, position }: Props) {
       className={`absolute ${
         position === "above" ? "bottom-[calc(100%+20px)]" : "top-[calc(100%+20px)]"
       } left-0`}
-      style={{ width: "260px" }}
+      style={{ width: "320px" }}
     >
       {/* Connector line from dot to card */}
       <div
