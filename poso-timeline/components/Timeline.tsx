@@ -102,45 +102,44 @@ function RegimeDescription({ text, top, width }: { text: string; top: number; wi
 }
 
 export default function Timeline() {
-  const wrapperRef    = useRef<HTMLDivElement>(null);
-  const rulerRef      = useRef<HTMLDivElement>(null);
-  const isDragging    = useRef(false);
-  const startX        = useRef(0);
-  const startScroll   = useRef(0);          // scroll pos captured at mousedown
-  const scrollPosRef  = useRef(0);          // always-current scroll pos
-  const [scrollPos,   setScrollPos] = useState(0);
-  const [dragging,    setDragging]  = useState(false);
-  const [totalW,      setTotalW]    = useState(0);
+  const wrapperRef   = useRef<HTMLDivElement>(null);
+  const canvasRef    = useRef<HTMLDivElement>(null);   // direct DOM target for transform
+  const rulerRef     = useRef<HTMLDivElement>(null);
+  const isDragging   = useRef(false);
+  const startX       = useRef(0);
+  const startScroll  = useRef(0);
+  const scrollPos    = useRef(0);                      // no state — pure ref
+  const [dragging,   setDragging] = useState(false);  // only for cursor style
 
-  /* ── drag — transform-based (avoids overflow-x/y CSS conflict) ── */
+  /* ── drag: all updates are imperative (zero re-renders during drag) ── */
   const onMouseDown = useCallback((e: React.MouseEvent) => {
-    isDragging.current = true;
+    isDragging.current  = true;
     setDragging(true);
-    startX.current     = e.pageX;
-    startScroll.current = scrollPosRef.current;  // capture position at drag start
+    startX.current      = e.pageX;
+    startScroll.current = scrollPos.current;
   }, []);
 
   useEffect(() => {
-    const onMove = (e: MouseEvent) => {
-      if (!isDragging.current || !wrapperRef.current) return;
-      const maxScroll = Math.max(0, totalW - wrapperRef.current.clientWidth);
-      // delta from original mousedown position (not incremental)
+    const move = (e: MouseEvent) => {
+      if (!isDragging.current || !wrapperRef.current || !canvasRef.current) return;
+      const maxScroll = Math.max(0, canvasRef.current.offsetWidth - wrapperRef.current.clientWidth);
       const next = Math.max(0, Math.min(
         startScroll.current + (startX.current - e.pageX) * 1.2,
         maxScroll
       ));
-      scrollPosRef.current = next;
-      setScrollPos(next);
+      scrollPos.current = next;
+      // Imperatively set transforms — no setState, no re-render
+      canvasRef.current.style.transform  = `translateX(-${next}px)`;
       if (rulerRef.current) rulerRef.current.style.transform = `translateX(-${next}px)`;
     };
-    const onUp = () => { isDragging.current = false; setDragging(false); };
-    window.addEventListener("mousemove", onMove);
-    window.addEventListener("mouseup",   onUp);
+    const up = () => { isDragging.current = false; setDragging(false); };
+    window.addEventListener("mousemove", move);
+    window.addEventListener("mouseup",   up);
     return () => {
-      window.removeEventListener("mousemove", onMove);
-      window.removeEventListener("mouseup",   onUp);
+      window.removeEventListener("mousemove", move);
+      window.removeEventListener("mouseup",   up);
     };
-  }, [totalW]);
+  }, []);
 
   /* ── build layout ── */
   type LayoutItem = {
@@ -164,8 +163,6 @@ export default function Timeline() {
   }
   const totalWidth   = cursor + 200;
   const canvasHeight = CARD_AREA_HEIGHT * 2 + 1;
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => { setTotalW(totalWidth); }, [totalWidth]);
 
   // Year positions derived from actual item x coordinates — one label per unique year
   const yearPositions: { year: string; x: number }[] = [];
@@ -301,10 +298,11 @@ export default function Timeline() {
           }}
           onMouseDown={onMouseDown}
         >
-          {/* Canvas moves via transform — no overflow-x scroll, so overflow-y is free */}
+          {/* Canvas moves via imperative transform — zero re-renders during drag */}
           <div
+            ref={canvasRef}
             style={{
-              transform: `translateX(-${scrollPos}px)`,
+              transform: `translateX(0px)`,
               willChange: "transform",
               width: `${totalWidth}px`,
               minWidth: "100%",
@@ -404,7 +402,7 @@ export default function Timeline() {
               position: "relative",
               height: "100%",
               width: `${totalWidth}px`,
-              transform: `translateX(-${scrollPos}px)`,
+              transform: `translateX(0px)`,
               willChange: "transform",
             }}
           >
