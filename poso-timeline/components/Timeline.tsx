@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useCallback, useEffect } from "react";
+import { useRef, useState, useCallback, useEffect, Fragment } from "react";
 import { timelineData, CATEGORY_COLORS } from "@/data/timeline";
 import TimelineCard from "./TimelineCard";
 
@@ -40,6 +40,40 @@ function HighlightedTitle({ text, bg }: { text: string; bg: string }) {
         {text}
       </span>
     </h1>
+  );
+}
+
+const PREVIEW_CHARS = 220;
+
+function RegimeDescription({ text, top, width }: { text: string; top: number; width: number }) {
+  const [open, setOpen] = useState(false);
+  const short = text.length > PREVIEW_CHARS;
+  return (
+    <div className="absolute px-5" style={{ top: `${top}px`, maxWidth: `${width}px` }}>
+      <p style={{ fontFamily: "var(--font-inter)", fontSize: "14px", lineHeight: 1.7, color: "rgba(26,18,8,0.65)" }}>
+        {open || !short ? text : text.slice(0, PREVIEW_CHARS) + "…"}
+      </p>
+      {short && (
+        <button
+          onClick={() => setOpen((o) => !o)}
+          style={{
+            marginTop: "8px",
+            fontFamily: "var(--font-ocr)",
+            fontSize: "9px",
+            letterSpacing: "0.14em",
+            textTransform: "uppercase",
+            color: "#E94B3F",
+            background: "none",
+            border: "none",
+            borderBottom: "1px solid #E94B3F",
+            padding: "0 0 1px 0",
+            cursor: "pointer",
+          }}
+        >
+          {open ? "Read less ↑" : "Read more ↓"}
+        </button>
+      )}
+    </div>
   );
 }
 
@@ -284,11 +318,11 @@ export default function Timeline() {
                     </div>
                     <div className="absolute left-5 right-5" style={{ top: `${LINE_Y}px`, height: "1.5px", backgroundColor: "rgba(26,18,8,0.15)" }} />
                     {item.event.description && (
-                      <div className="absolute px-5" style={{ top: `${LINE_Y + 16}px`, maxWidth: `${SUBTITLE_WIDTH}px` }}>
-                        <p style={{ fontFamily: "var(--font-inter)", fontSize: "14px", lineHeight: 1.7, color: "rgba(26,18,8,0.65)" }}>
-                          {item.event.description}
-                        </p>
-                      </div>
+                      <RegimeDescription
+                        text={item.event.description}
+                        top={LINE_Y + 16}
+                        width={SUBTITLE_WIDTH}
+                      />
                     )}
                   </div>
                 );
