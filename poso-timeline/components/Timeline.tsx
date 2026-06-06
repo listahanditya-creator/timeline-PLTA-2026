@@ -6,7 +6,7 @@ import TimelineCard from "./TimelineCard";
 
 const EVENT_WIDTH    = 360;
 const SUBTITLE_WIDTH = 320;
-const CARD_AREA_HEIGHT = 520;   // tall enough for pinned/expanded cards above & below
+const CARD_AREA_HEIGHT = 300;   // compact — cards sit closer to header
 const LINE_Y = CARD_AREA_HEIGHT;
 
 const NAV_ITEMS = ["About", "Methodology", "Reading Room"];
