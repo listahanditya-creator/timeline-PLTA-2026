@@ -30,11 +30,11 @@ export default function TimelineCard({ event, position }: Props) {
       <div
         className="relative cursor-pointer select-none"
         style={{
-          border: `1.5px solid ${expanded ? colors.dot : colors.border}`,
-          backgroundColor: expanded ? colors.bg : "#FFFBE9",
+          border: `1.5px solid ${colors.dot}`,
+          backgroundColor: colors.bg,
           boxShadow: expanded
-            ? `0 6px 28px 0 ${colors.dot}28`
-            : "0 1px 4px 0 rgba(0,0,0,0.06)",
+            ? `0 6px 28px 0 ${colors.dot}38`
+            : `0 1px 6px 0 ${colors.dot}22`,
           transition: "all 0.22s ease",
         }}
         onMouseEnter={() => setExpanded(true)}

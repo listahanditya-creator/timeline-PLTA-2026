@@ -24,64 +24,64 @@ export const CATEGORY_COLORS: Record<
   Category,
   { bg: string; border: string; dot: string; label: string }
 > = {
-  // Era / regime dividers — warm cream strip
+  // Era / regime dividers
   subtitle: {
-    bg: "#FAEEE1",
+    bg: "#FDEBD8",
     border: "#FBAE84",
     dot: "#FBAE84",
     label: "Era / Regime",
   },
-  // Kalla oligarch — mango orange #FE973B
+  // Kalla oligarch — mango orange #FE973B at ~50% on #FFFBE9
   "kalla-oligarch": {
-    bg: "#FFF3E5",
+    bg: "#FECF9C",
     border: "#FE973B",
     dot: "#FE973B",
     label: "Kalla Oligarch & Business",
   },
-  // National politics — banana yellow #FFD965
+  // National politics — banana yellow #F8BA43 at ~50%
   "national-politics": {
-    bg: "#FFFBE8",
-    border: "#FFD965",
+    bg: "#FBDCA1",
+    border: "#F8BA43",
     dot: "#F8BA43",
     label: "National Politics of Hydropower",
   },
-  // Socio-environmental — cantaloupe/salmon #FBA18C
+  // Socio-environmental — salmon #FBA18C at ~50%
   "socio-environmental": {
-    bg: "#FFF2EE",
+    bg: "#FDD0C6",
     border: "#FBA18C",
     dot: "#FBA18C",
     label: "Socio-Environmental Violence",
   },
-  // Community resistance — olive green #D3D477
+  // Community resistance — olive #D3D477 at ~50%
   "community-resistance": {
-    bg: "#F5F6E0",
+    bg: "#E9EABB",
     border: "#D3D477",
     dot: "#D3D477",
     label: "Community Resistance",
   },
-  // Conflict & militarisation — red #E94B3F
+  // Conflict & militarisation — red #E94B3F at ~50%
   "conflict-militarisation": {
-    bg: "#FDECEA",
+    bg: "#F4A5A0",
     border: "#E94B3F",
     dot: "#E94B3F",
     label: "Conflict, Militarisation & Securitisation",
   },
-  // Human rights — sky blue #9EC9EF
+  // Human rights — sky blue #9EC9EF at ~50%
   "human-rights": {
-    bg: "#EBF5FC",
+    bg: "#CEE4F7",
     border: "#9EC9EF",
     dot: "#9EC9EF",
     label: "Human Rights Interventions",
   },
-  // Public donations — lavender #E8D9EC
+  // Public donations — lavender #E8D9EC at ~50%
   "public-donations": {
-    bg: "#F5F0F8",
+    bg: "#F1E8F5",
     border: "#E8D9EC",
     dot: "#A98067",
     label: "Public Donations / Church Relations",
   },
   uncategorised: {
-    bg: "#F5F5F0",
+    bg: "#E8E8E0",
     border: "#CCCCCC",
     dot: "#AAAAAA",
     label: "Other",

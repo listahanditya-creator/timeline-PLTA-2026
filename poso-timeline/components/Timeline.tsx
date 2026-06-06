@@ -205,9 +205,9 @@ export default function Timeline() {
                     top: 0,
                     width: `${SUBTITLE_WIDTH}px`,
                     height: `${canvasHeight}px`,
-                    borderLeft: "2px solid #c0503e",
+                    borderLeft: "2px solid #FBAE84",
                     borderRight: "1px solid rgba(26,18,8,0.06)",
-                    backgroundColor: "#F0816D",
+                    backgroundColor: "#FDEBD8",
                   }}
                 >
                   {/* Era label — top half */}
@@ -217,7 +217,7 @@ export default function Timeline() {
                         fontFamily: "var(--font-ocr)",
                         fontSize: "28px",
                         letterSpacing: "0.04em",
-                        color: "rgba(255,255,255,0.9)",
+                        color: "#E94B3F",
                         marginBottom: "12px",
                       }}
                     >
@@ -229,8 +229,8 @@ export default function Timeline() {
                         fontSize: "18px",
                         fontWeight: 700,
                         lineHeight: 1.3,
-                        color: "#fff",
-                        maxWidth: "260px",
+                        color: "#1a1208",
+                        maxWidth: "280px",
                       }}
                     >
                       {item.event.keyEvent}
@@ -243,7 +243,7 @@ export default function Timeline() {
                     style={{
                       top: `${LINE_Y}px`,
                       height: "1.5px",
-                      backgroundColor: "rgba(255,255,255,0.4)",
+                      backgroundColor: "rgba(26,18,8,0.15)",
                     }}
                   />
 
@@ -258,7 +258,7 @@ export default function Timeline() {
                           fontFamily: "var(--font-inter)",
                           fontSize: "14px",
                           lineHeight: 1.7,
-                          color: "rgba(255,255,255,0.85)",
+                          color: "rgba(26,18,8,0.65)",
                         }}
                       >
                         {item.event.description.slice(0, 260)}
@@ -311,12 +311,12 @@ export default function Timeline() {
         className="flex-shrink-0 border-t overflow-hidden"
         style={{
           borderColor: "rgba(26,18,8,0.07)",
-          height: "28px",
+          height: "44px",
           backgroundColor: "#FFF7DC",
         }}
       >
         <div
-          className="flex items-center h-full pl-20"
+          className="flex items-center h-full pl-20 gap-0"
           style={{ width: `${totalWidth}px` }}
         >
           {Array.from(
@@ -328,15 +328,26 @@ export default function Timeline() {
           ).map((y) => (
             <span
               key={y}
-              className="text-[9px] tracking-[0.1em]"
               style={{
-                fontFamily: "var(--font-hanken)",
-                color: "rgba(26,18,8,0.28)",
+                display: "inline-block",
                 minWidth: `${EVENT_WIDTH}px`,
+                fontFamily: "var(--font-ocr)",
+                fontSize: "14px",
+                letterSpacing: "0.06em",
                 fontVariantNumeric: "tabular-nums",
               }}
             >
-              {y}
+              <span
+                style={{
+                  backgroundColor: "#E94B3F",
+                  color: "#fff",
+                  padding: "2px 6px",
+                  display: "inline-block",
+                  lineHeight: 1.4,
+                }}
+              >
+                {y}
+              </span>
             </span>
           ))}
         </div>
