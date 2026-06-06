@@ -73,28 +73,41 @@ export default function TimelineCard({ event, position }: Props) {
             {event.keyEvent}
           </h3>
 
-          {/* Description — hidden until expanded, no maxHeight cap */}
+          {/* Description — scrollable inner area when expanded */}
           {expanded && (
             <div>
-              <p style={{ fontFamily: "var(--font-inter)", fontSize: "14px", lineHeight: 1.75, color: "rgba(26,18,8,0.82)", whiteSpace: "pre-line" }}>
-                {event.description}
-              </p>
+              {/* Scrollable description box */}
+              <div
+                style={{
+                  maxHeight: "260px",
+                  overflowY: "auto",
+                  paddingRight: "6px",
+                  marginBottom: "8px",
+                  scrollbarWidth: "thin",
+                  scrollbarColor: `${colors.dot} transparent`,
+                }}
+                onClick={(e) => e.stopPropagation()} // let scroll work without toggling pin
+              >
+                <p style={{ fontFamily: "var(--font-inter)", fontSize: "14px", lineHeight: 1.75, color: "rgba(26,18,8,0.82)", whiteSpace: "pre-line" }}>
+                  {event.description}
+                </p>
 
-              {event.archive && (
-                <a
-                  href={event.archive}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{ display: "inline-block", marginTop: "12px", fontFamily: "var(--font-ocr)", fontSize: "9px", letterSpacing: "0.1em", color: colors.dot, textDecoration: "none", borderBottom: `1px solid ${colors.dot}`, paddingBottom: "1px" }}
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  SOURCE →
-                </a>
-              )}
+                {event.archive && (
+                  <a
+                    href={event.archive}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ display: "inline-block", marginTop: "12px", fontFamily: "var(--font-ocr)", fontSize: "9px", letterSpacing: "0.1em", color: colors.dot, textDecoration: "none", borderBottom: `1px solid ${colors.dot}`, paddingBottom: "1px" }}
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    SOURCE →
+                  </a>
+                )}
+              </div>
 
               {/* Pin indicator */}
-              <p style={{ marginTop: "10px", fontFamily: "var(--font-ocr)", fontSize: "8px", letterSpacing: "0.15em", textTransform: "uppercase", color: "rgba(26,18,8,0.25)" }}>
-                {pinned ? "click to close" : "click to pin"}
+              <p style={{ fontFamily: "var(--font-ocr)", fontSize: "8px", letterSpacing: "0.15em", textTransform: "uppercase", color: "rgba(26,18,8,0.25)" }}>
+                {pinned ? "click to close" : "click to pin open"}
               </p>
             </div>
           )}
