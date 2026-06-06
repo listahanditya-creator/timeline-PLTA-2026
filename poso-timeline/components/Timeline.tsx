@@ -48,11 +48,34 @@ const PREVIEW_CHARS = 220;
 function RegimeDescription({ text, top, width }: { text: string; top: number; width: number }) {
   const [open, setOpen] = useState(false);
   const short = text.length > PREVIEW_CHARS;
+
   return (
-    <div className="absolute px-5" style={{ top: `${top}px`, maxWidth: `${width}px` }}>
-      <p style={{ fontFamily: "var(--font-inter)", fontSize: "14px", lineHeight: 1.7, color: "rgba(26,18,8,0.65)" }}>
-        {open || !short ? text : text.slice(0, PREVIEW_CHARS) + "…"}
-      </p>
+    <div
+      className="absolute px-5"
+      style={{ top: `${top}px`, width: `${width - 40}px` }}
+    >
+      {/* Scrollable text area */}
+      <div
+        style={{
+          maxHeight: open ? "220px" : "auto",
+          overflowY: open ? "auto" : "visible",
+          scrollbarWidth: "thin",
+          scrollbarColor: "#FBAE84 transparent",
+          paddingRight: open ? "4px" : "0",
+        }}
+      >
+        <p
+          style={{
+            fontFamily: "var(--font-inter)",
+            fontSize: "14px",
+            lineHeight: 1.7,
+            color: "rgba(26,18,8,0.65)",
+          }}
+        >
+          {open || !short ? text : text.slice(0, PREVIEW_CHARS) + "…"}
+        </p>
+      </div>
+
       {short && (
         <button
           onClick={() => setOpen((o) => !o)}
@@ -68,6 +91,7 @@ function RegimeDescription({ text, top, width }: { text: string; top: number; wi
             borderBottom: "1px solid #E94B3F",
             padding: "0 0 1px 0",
             cursor: "pointer",
+            display: "block",
           }}
         >
           {open ? "Read less ↑" : "Read more ↓"}
