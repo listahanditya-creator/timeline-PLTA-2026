@@ -27,7 +27,7 @@ const PAGE_TITLE =
 /** Title with continuous highlight per line, vertical white gaps between lines */
 function HighlightedTitle({ text, bg }: { text: string; bg: string }) {
   return (
-    <h1 style={{ fontFamily: "var(--font-ocr)", fontSize: "28px", fontWeight: 400, lineHeight: 2, letterSpacing: "0.02em", color: "#1a1208" }}>
+    <h1 style={{ fontFamily: "var(--font-ocr)", fontSize: "22px", fontWeight: 400, lineHeight: 2, letterSpacing: "0.02em", color: "#1a1208" }}>
       <span
         style={{
           backgroundColor: bg,
@@ -166,7 +166,7 @@ export default function Timeline() {
           style={{ borderColor: "rgba(26,18,8,0.07)" }}
         >
           {/* Title with per-word highlight */}
-          <div style={{ maxWidth: "620px" }}>
+          <div style={{ maxWidth: "860px", flex: 1 }}>
             <HighlightedTitle text={PAGE_TITLE} bg="#FEC2C2" />
             <p
               style={{
@@ -175,13 +175,15 @@ export default function Timeline() {
                 lineHeight: 1.75,
                 color: "rgba(26,18,8,0.8)",
                 marginTop: "14px",
-                maxWidth: "580px",
+                maxWidth: "820px",
               }}
             >
-              This timeline analysis aims to understand the Poso Energy Hydroelectric Dam in
-              the larger Indonesia&apos;s socio-political contexts, unfolding the violence (and
-              negligence) toward its surrounding ecosystem and community — especially the To
-              Pamona Indigenous community in Pamona, Poso.
+              The timeline situates the development of the Poso Energy Hydroelectric Dam within
+              Indonesia&apos;s broader socio-political context, revealing how violence and neglect
+              toward surrounding ecosystems and communities, particularly the To Pamona Indigenous
+              people and local communities of Poso, Central Sulawesi, could not be separated from
+              longer historical trajectories of dispossession, displacement, and
+              socio-environmental violence.
             </p>
           </div>
 
