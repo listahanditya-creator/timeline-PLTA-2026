@@ -342,7 +342,7 @@ export default function Timeline() {
                       backgroundColor: "#FDEBD8",
                     }}
                   >
-                    <div className="absolute px-5 pt-6" style={{ maxWidth: `${SUBTITLE_WIDTH}px` }}>
+                    <div className="absolute px-5" style={{ top: `${LINE_Y - 150}px`, maxWidth: `${SUBTITLE_WIDTH}px` }}>
                       <p style={{ fontFamily: "var(--font-ocr)", fontSize: "28px", letterSpacing: "0.04em", color: "#E94B3F", marginBottom: "10px", lineHeight: 1.1 }}>
                         {item.event.year}
                       </p>
